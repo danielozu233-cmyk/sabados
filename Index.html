@@ -150,9 +150,15 @@
       color: var(--muted)
     }
 
-    .state {
-      font-weight: 800
-    }
+.state{
+font-weight:800;
+font-size:14px;
+letter-spacing:0.3px;
+}
+.stat .value{
+font-weight:900;
+font-size:16px;
+}
 
     .stats {
       display: flex;
@@ -348,6 +354,28 @@
       font-size: 12px;
       color: var(--muted)
     }
+    select option{
+  background:#0b1224;
+  color:#ffffff;
+}
+select:focus{
+outline:none;
+border:1px solid var(--accent);
+}
+
+select option:checked{
+background:#1e293b;
+color:#ffffff;
+}
+select:focus{
+outline:none;
+border:1px solid var(--accent);
+}
+
+select option:checked{
+background:#1e293b;
+color:#ffffff;
+}
   </style>
 </head>
 
@@ -480,35 +508,171 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // agentes (usaré tu lista; mantenla actualizada aquí si agregas más)
-    const agentes = [
-      { nombre: "Sarahi Churumia", ext: 8001, horario: "07:00" },
-      { nombre: "Justa Jaes", ext: 8002, horario: "09:00"},
-      { nombre: "Javier Alvarez", ext: 8003,horario: "07:00" },
-      { nombre: "Mónica Ordónez", ext: 8005, horario: "09:00" },
-      { nombre: "Alejandro Vásquez", ext: 8006, horario: "07:00"  },
-      { nombre: "Joselyne Velásquez", ext: 8007, horario: "09:00"  },
-      { nombre: "Jackeline Castillo", ext: 8008, horario: "07:00"  },
-      { nombre: "Mildred Cordero", ext: 8009, horario: "07:00" },
-      { nombre: "Tania de León", ext: 8010, horario: "07:00"  },
-      { nombre: "Anthony García", ext: 8011, horario: "09:00" },
-      { nombre: "Jorge Veliz", ext: 8013, horario: "09:00"  },
-      { nombre: "Néstor Galvez", ext: 8015, horario: "07:00"  },
-      { nombre: "Andrea Jiménez", ext: 8016, horario: "09:00" },
-      { nombre: "Diego Chiché", ext: 8017, horario: "09:00"  },
-      { nombre: "Ashley López", ext: 8018, horario: "07:00"  },
-      { nombre: "Synndy Sanchez", ext: 8020, horario: "09:00" },
-      { nombre: "Mishell de León", ext: 8021, horario: "07:00" },
-      { nombre: "Omar Ramirez", ext: 8022, horario: "08:00"},
-      { nombre: "Madelin Ovando", ext: 8023, horario: "09:00" },
-      { nombre: "Evelyn de León", ext: 8024, horario: "07:00" },
-      { nombre: "Bryan Hernandez", ext: 8026, horario: "09:00" },
-      { nombre: "Rafael Sánchez", ext: 8027, horario: "07:00" },
-      { nombre: "Marta Morales", ext: 8028, horario: "07:00" },
-      { nombre: "Pablo Ibañez", ext: 8029, horario: "07:00" },
-      { nombre: "María Perdomo", ext: 8030, horario: "09:00" }
-    ];
+const agentes = [
 
+{ nombre:"Sarahi Churumia", ext:8001,
+days:{
+1:"09:00",
+2:"09:00",
+3:"09:00",
+4:"10:00",
+5:"10:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Justa Jaes", ext:8002, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Javier Alvarez", ext:8003, default:"08:00", sabado:"07:00" },
+
+{ nombre:"Merlin Bajan", ext:8004, default:"08:00", sabado:null },
+
+{ nombre:"Mónica Ordónez", ext:8005, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Alejandro Vásquez", ext:8006,
+days:{
+1:"08:00",
+2:"08:00",
+3:"08:00",
+4:"08:00",
+5:"08:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Joselyne Velásquez", ext:8007, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Jackeline Castillo", ext:8008,
+days:{
+1:"10:00",
+2:"10:00",
+3:"09:00",
+4:"09:00",
+5:"09:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Mildred Cordero", ext:8009, default:"08:00", sabado:"09:00" },
+
+{ nombre:"Tania de León", ext:8010,
+days:{
+1:"09:00",
+2:"09:00",
+3:"09:00",
+4:"10:00",
+5:"10:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Anthony García", ext:8011, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Jorge Veliz", ext:8013, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Daniel Coyoy", ext:8014, default:"08:00", sabado:null },
+
+{ nombre:"Néstor Galvez", ext:8015,
+days:{
+1:"10:00",
+2:"10:00",
+3:"09:00",
+4:"09:00",
+5:"09:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Andrea Jiménez", ext:8016, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Diego Chiché", ext:8017, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Ashley López", ext:8018, default:"08:00", sabado:"07:00" },
+
+{ nombre:"Synndy Sanchez", ext:8020, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Mishell de León", ext:8021,
+days:{
+1:"10:00",
+2:"10:00",
+3:"09:00",
+4:"09:00",
+5:"09:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Omar Ramirez", ext:8022, default:"09:00", sabado:"08:00" },
+
+{ nombre:"Madelin Ovando", ext:8023, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Evelyn de León", ext:8024,
+days:{
+1:"10:00",
+2:"10:00",
+3:"09:00",
+4:"09:00",
+5:"09:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Andres Marín", ext:8025, default:"08:00", sabado:null },
+
+{ nombre:"Bryan Hernandez", ext:8026, default:"09:00", sabado:"09:00" },
+
+{ nombre:"Rafael Sánchez", ext:8027,
+days:{
+1:"09:00",
+2:"09:00",
+3:"09:00",
+4:"10:00",
+5:"10:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Marta Morales", ext:8028,
+days:{
+1:"10:00",
+2:"10:00",
+3:"09:00",
+4:"09:00",
+5:"09:00",
+6:"07:00"
+}
+},
+
+{ nombre:"Pablo Ibañez", ext:8029,
+days:{
+1:"08:00",
+2:"08:00",
+3:"08:00",
+4:"08:00",
+5:"08:00",
+6:"07:00"
+}
+},
+
+{ nombre:"María Perdomo", ext:8030, default:"09:00", sabado:"09:00" }
+
+];
+
+function obtenerHorarioAgente(agente){
+
+const hoy = new Date().getDay();
+
+if(agente.days){
+return agente.days[hoy];
+}
+
+if(hoy === 6){
+return agente.sabado;
+}
+
+return agente.default;
+
+}
     // DOM
     const grid = document.getElementById('grid');
     const pdfAgentFilter = document.getElementById('pdfAgentFilter');
@@ -553,108 +717,147 @@
       });
     }
     initSelects();
-
     // realtime cache
-    let latestData = {}; // ext -> doc
+let registros = [];
 
-    // listener
-    function startListener() {
-      db.collection('agentes_sabado').onSnapshot(snap => {
-        snap.forEach(doc => { latestData[doc.id] = doc.data(); });
-        renderGrid();
-      }, err => { console.error('snapshot err', err); renderGrid(); });
-    }
-    startListener();
+db.collection("agentes_sabado").onSnapshot((snap)=>{
+
+  registros = [];
+
+snap.forEach(doc=>{
+  registros.push({
+    id: doc.id,
+    ...doc.data()
+  });
+});
+
+  renderGrid();
+
+});
 
     // helpers
     function toMinutes(h) { if (!h) return null; const p = h.split(':').map(Number); if (p.length < 2 || p.some(isNaN)) return null; return p[0] * 60 + p[1]; }
     function esc(s) { if (!s) return ''; return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
 
     // render
-function renderGrid() {
+function renderGrid(){
+
   const q = searchInput.value.trim().toLowerCase();
   const filter = filterSelect.value;
-  const compact = compactCheckbox.checked;
-  grid.innerHTML = '';
 
-  agentes.forEach(agent => {
+  const selectedAgent = pdfAgentFilter.value;
+  const from = pdfDateFrom.value;
+  const to = pdfDateTo.value;
 
-    const ext = String(agent.ext);
-    const data = latestData[ext] || {};
-    const name = agent.nombre;
-    const login = data.login || '';
-    const logout = data.logout || '';
-    const salientes = data.salientes ?? 0;
-    const entrantes = data.entrantes ?? 0;
-    const obs = data.observaciones || '';
+  grid.innerHTML = "";
 
-    // search
-    if (q) {
+  registros.forEach(rec=>{
+
+    const ext = String(rec.extension);
+    const name = rec.nombre;
+
+    const login = rec.login || "";
+    const logout = rec.logout || "";
+    const salientes = rec.salientes ?? 0;
+    const entrantes = rec.entrantes ?? 0;
+    const obs = rec.observaciones || "";
+
+    // buscar horario del agente
+    const agent = agentes.find(a => String(a.ext) === ext);
+const horario = agent ? obtenerHorarioAgente(agent) : "08:00";
+    // filtro por agente
+    if(selectedAgent !== "all" && ext !== selectedAgent) return;
+
+    // filtro por fecha
+if(from){
+  if(rec.fecha < from) return;
+}
+
+if(to){
+  if(rec.fecha > to) return;
+}
+    // búsqueda
+    if(q){
       const inName = name.toLowerCase().includes(q);
       const inExt = ext.includes(q);
-      if (!inName && !inExt) return;
+      if(!inName && !inExt) return;
     }
 
     // estado
-    let estado = 'Sin marcar';
-    let badgeColor = 'var(--muted)';
+    let estado = "Sin marcar";
+    let badgeColor = "var(--muted)";
 
-    if (login) {
+    if(login){
 
       const lm = toMinutes(login);
-      const hm = toMinutes(agent.horario || "08:00"); // 👈 horario del agente
+      const hm = toMinutes(horario);
 
-      if (lm === null) {
-        estado = 'Hora inválida';
-        badgeColor = 'var(--accent)';
+      if(lm === null){
+        estado = "Hora inválida";
+        badgeColor = "var(--accent)";
       }
-      else if (lm <= hm) {
-        estado = 'Puntual';
-        badgeColor = 'var(--green)';
+      else if(lm <= hm){
+        estado = "Puntual";
+        badgeColor = "var(--green)";
       }
-      else {
+      else{
         const r = lm - hm;
         estado = `Retraso ${r} min`;
-        badgeColor = r <= 5 ? 'var(--accent)' : 'var(--red)';
+        badgeColor = r <= 5 ? "var(--accent)" : "var(--red)";
       }
+
     }
 
-    // filters
-    if (filter === 'puntual' && badgeColor !== 'var(--green)') return;
-    if (filter === 'leve' && badgeColor !== 'var(--accent)') return;
-    if (filter === 'retraso' && badgeColor !== 'var(--red)') return;
-    if (filter === 'sinmarcar' && login) return;
+    // filtros de estado
+    if(filter === "puntual" && badgeColor !== "var(--green)") return;
+    if(filter === "leve" && badgeColor !== "var(--accent)") return;
+    if(filter === "retraso" && badgeColor !== "var(--red)") return;
+    if(filter === "sinmarcar" && login) return;
 
-    // 👉 aquí sigue tu código normal para crear la card...
-        // build card
-        const wrap = document.createElement('div'); wrap.className = 'card-wrap';
-        const c = document.createElement('div'); c.className = 'card';
-        c.innerHTML = `
+    // crear tarjeta
+    const wrap = document.createElement("div");
+    wrap.className = "card-wrap";
+
+    const c = document.createElement("div");
+    c.className = "card";
+
+    c.innerHTML = `
       <div class="card-header">
         <div style="display:flex;gap:10px;align-items:center">
           <div class="avatar">${name.charAt(0)}</div>
           <div>
             <div class="agent">${esc(name)}</div>
-            <div class="ext">Ext ${ext}</div>
+            <div class="ext">Ext ${ext} • ${rec.fecha}</div>
           </div>
         </div>
+
         <div style="text-align:right">
-          <div class="state" style="color:${badgeColor}">${esc(estado)}</div>
-          <div class="ext" style="color:var(--muted);font-size:12px">${login || '-'} • ${logout || '-'}</div>
+          <div class="state" style="color:${badgeColor}">${estado}</div>
+          <div class="ext">${login || "-"} • ${logout || "-"}</div>
         </div>
       </div>
-      <div class="stats">
-        <div class="stat"><div class="label">Salientes</div><div class="value">${salientes}</div></div>
-        <div class="stat"><div class="label">Entrantes</div><div class="value">${entrantes}</div></div>
-      </div>
-      <div class="note">${esc(obs ? (obs.length > 100 ? obs.slice(0, 97) + '...' : obs) : 'Sin observaciones')}</div>
-    `;
-        // click opens panel
-        c.addEventListener('click', () => openPanel(ext));
-        wrap.appendChild(c); grid.appendChild(wrap);
-      });
-    }
 
+      <div class="stats">
+        <div class="stat">
+          <div class="label">Salientes</div>
+          <div class="value">${salientes}</div>
+        </div>
+
+        <div class="stat">
+          <div class="label">Entrantes</div>
+          <div class="value">${entrantes}</div>
+        </div>
+      </div>
+
+      <div class="note">${esc(obs || "Sin observaciones")}</div>
+    `;
+
+    wrap.appendChild(c);
+    grid.appendChild(wrap);
+
+  });
+
+}
     function openPanel(ext) { const agent = agentes.find(a => String(a.ext) === String(ext)); const rec = latestData[String(ext)] || {}; panelName.textContent = agent.nombre; panelExt.textContent = 'Ext: ' + agent.ext + (rec.fecha ? ' • ' + rec.fecha : ''); panelTimes.textContent = `${rec.login || '-'} • ${rec.logout || '-'}`; panelSalientes.textContent = rec.salientes ?? 0; panelEntrantes.textContent = rec.entrantes ?? 0; panelObs.textContent = rec.observaciones || 'Sin observación'; panelState.textContent = (() => { if (!rec.login) return 'Sin marcar'; const lm = toMinutes(rec.login); if (lm === null) return 'Hora inválida'; if (lm <= 8 * 60) return 'Puntual'; const r = lm - 8 * 60; return 'Retraso ' + r + ' min'; })(); rightPanel.classList.add('show'); panelEditBtn.onclick = () => showModal(ext); }
 
     // modal
@@ -676,119 +879,137 @@ function renderGrid() {
       const ext = String(formAgent.value); const agent = agentes.find(a => String(a.ext) === ext); if (!agent) { alert('Agente inválido'); return; }
       const login = formLogin.value.trim(); if (!login) { alert('Ingresa Log in'); return; }
       const logout = formLogout.value.trim(); const salientes = Number(formSalientes.value || 0); const entrantes = Number(formEntrantes.value || 0); const obs = formObs.value.trim(); const fecha = formDate.value || today;
-      try { await db.collection('agentes_sabado').doc(ext).set({ nombre: agent.nombre, extension: Number(ext), fecha, login, logout, salientes, entrantes, observaciones: obs, timestamp: Date.now() }); hideModal(); } catch (err) { console.error('Guardar', err); alert('Error al guardar. Revise consola.'); }
+      try {
+        const docId = `${ext}_${fecha}`;
+
+        await db.collection('agentes_sabado').doc(docId).set({
+          nombre: agent.nombre,
+          extension: Number(ext),
+          fecha,
+          login,
+          logout,
+          salientes,
+          entrantes,
+          observaciones: obs,
+          timestamp: Date.now()
+        }); hideModal();
+      } catch (err) { console.error('Guardar', err); alert('Error al guardar. Revise consola.'); }
     });
 
     // filters
-    searchInput.addEventListener('input', () => renderGrid()); filterSelect.addEventListener('change', () => renderGrid()); compactCheckbox.addEventListener('change', () => renderGrid()); pdfAgentFilter.addEventListener('change', () => { });
+searchInput.addEventListener('input', renderGrid);
+filterSelect.addEventListener('change', renderGrid);
+compactCheckbox.addEventListener('change', renderGrid);
+pdfAgentFilter.addEventListener('change', renderGrid);
+pdfDateFrom.addEventListener('change', renderGrid);
+pdfDateTo.addEventListener('change', renderGrid);
+    // pdf
+    document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
 
-  // pdf
-document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
 
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF('p', 'mm', 'a4');
+      const from = pdfDateFrom.value;
+      const to = pdfDateTo.value;
+      const selected = pdfAgentFilter.value;
 
-  const from = pdfDateFrom.value;
-  const to = pdfDateTo.value;
-  const selected = pdfAgentFilter.value;
+      const rows = [];
 
-  const rows = [];
+      for (const agent of agentes) {
 
-  for (const agent of agentes) {
+        if (selected !== 'all' && String(agent.ext) !== String(selected)) continue;
 
-    if (selected !== 'all' && String(agent.ext) !== String(selected)) continue;
+const rec = registros
+  .filter(r => String(r.extension) === String(agent.ext))
+  .sort((a,b)=> b.timestamp - a.timestamp)[0];     if (!rec) continue;
 
-    const rec = latestData[String(agent.ext)];
-    if (!rec) continue;
+        // filtro de fechas
+        if (from || to) {
+          const rDate = new Date(rec.fecha || '');
+          if (from && rDate < new Date(from)) continue;
+          if (to && rDate > new Date(to + 'T23:59:59')) continue;
+        }
 
-    // filtro de fechas
-    if (from || to) {
-      const rDate = new Date(rec.fecha || '');
-      if (from && rDate < new Date(from)) continue;
-      if (to && rDate > new Date(to + 'T23:59:59')) continue;
-    }
+        // 🔥 CALCULAR ESTADO CON HORARIO REAL
+        let estado = 'Sin marcar';
 
-    // 🔥 CALCULAR ESTADO CON HORARIO REAL
-    let estado = 'Sin marcar';
+        if (rec.login) {
 
-    if (rec.login) {
+          const lm = toMinutes(rec.login);
+const hm = toMinutes(obtenerHorarioAgente(agent) || "08:00");
+          if (lm === null) {
+            estado = 'Hora inválida';
+          }
+          else if (lm <= hm) {
+            estado = 'Puntual';
+          }
+          else {
+            const r = lm - hm;
+            estado = 'Retraso ' + r + ' min';
+          }
+        }
 
-      const lm = toMinutes(rec.login);
-      const hm = toMinutes(agent.horario || "08:00");
-
-      if (lm === null) {
-        estado = 'Hora inválida';
+        rows.push({
+          main: [
+            rec.nombre || agent.nombre,
+            rec.extension || agent.ext,
+            rec.fecha || '',
+            rec.login || '',
+            rec.logout || '',
+            rec.salientes || 0,
+            rec.entrantes || 0,
+            estado
+          ],
+          obs: rec.observaciones || ''
+        });
       }
-      else if (lm <= hm) {
-        estado = 'Puntual';
-      }
-      else {
-        const r = lm - hm;
-        estado = 'Retraso ' + r + ' min';
-      }
-    }
 
-    rows.push({
-      main: [
-        rec.nombre || agent.nombre,
-        rec.extension || agent.ext,
-        rec.fecha || '',
-        rec.login || '',
-        rec.logout || '',
-        rec.salientes || 0,
-        rec.entrantes || 0,
-        estado
-      ],
-      obs: rec.observaciones || ''
+      // título
+      doc.setFontSize(14);
+      doc.text('Reporte De Agentes Sabado', 105, 14, null, null, 'center');
+
+      doc.setFontSize(10);
+      doc.text(`Rango: ${from || '...'} a ${to || '...'}`, 105, 20, null, null, 'center');
+
+      const body = [];
+
+      rows.forEach(r => {
+        body.push(r.main);
+        body.push([{
+          content: 'Observaciones: ' + (r.obs || 'Sin observación'),
+          colSpan: 8,
+          styles: { halign: 'left' }
+        }]);
+      });
+
+      doc.autoTable({
+        startY: 26,
+        head: [['Nombre', 'Ext', 'Fecha', 'Log in', 'Log out', 'Salientes', 'Entrantes', 'Estado']],
+        body: body,
+        styles: { fontSize: 9, cellPadding: 4, halign: 'center', valign: 'middle' },
+        headStyles: { fillColor: [37, 99, 235], textColor: 255 },
+
+        didParseCell: function (data) {
+
+          if (data.section === 'body' && data.column.index === 7) {
+            const val = String(data.cell.raw || '');
+            if (val.startsWith('Retraso')) data.cell.styles.textColor = [220, 38, 38];
+            if (val === 'Sin marcar') data.cell.styles.textColor = [130, 130, 130];
+          }
+
+          if (data.section === 'body' &&
+            typeof data.cell.raw === 'string' &&
+            data.cell.raw.startsWith('Observaciones:')) {
+
+            data.cell.styles.halign = 'left';
+            data.cell.styles.fontStyle = 'italic';
+            data.cell.styles.textColor = [200, 200, 200];
+          }
+        }
+      });
+
+      doc.save(`reporte_agentes_${from || 'all'}_a_${to || 'all'}.pdf`);
     });
-  }
-
-  // título
-  doc.setFontSize(14);
-  doc.text('Reporte De Agentes Sabado', 105, 14, null, null, 'center');
-
-  doc.setFontSize(10);
-  doc.text(`Rango: ${from || '...'} a ${to || '...'}`, 105, 20, null, null, 'center');
-
-  const body = [];
-
-  rows.forEach(r => {
-    body.push(r.main);
-    body.push([{
-      content: 'Observaciones: ' + (r.obs || 'Sin observación'),
-      colSpan: 8,
-      styles: { halign: 'left' }
-    }]);
-  });
-
-  doc.autoTable({
-    startY: 26,
-    head: [['Nombre', 'Ext', 'Fecha', 'Log in', 'Log out', 'Salientes', 'Entrantes', 'Estado']],
-    body: body,
-    styles: { fontSize: 9, cellPadding: 4, halign: 'center', valign: 'middle' },
-    headStyles: { fillColor: [37, 99, 235], textColor: 255 },
-
-    didParseCell: function (data) {
-
-      if (data.section === 'body' && data.column.index === 7) {
-        const val = String(data.cell.raw || '');
-        if (val.startsWith('Retraso')) data.cell.styles.textColor = [220, 38, 38];
-        if (val === 'Sin marcar') data.cell.styles.textColor = [130, 130, 130];
-      }
-
-      if (data.section === 'body' &&
-          typeof data.cell.raw === 'string' &&
-          data.cell.raw.startsWith('Observaciones:')) {
-
-        data.cell.styles.halign = 'left';
-        data.cell.styles.fontStyle = 'italic';
-        data.cell.styles.textColor = [200, 200, 200];
-      }
-    }
-  });
-
-  doc.save(`reporte_agentes_${from || 'all'}_a_${to || 'all'}.pdf`);
-});   
 
     // initial render
     renderGrid();

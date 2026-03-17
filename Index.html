@@ -193,8 +193,6 @@
       color: var(--muted);
       font-size: 13px
     }
-
-    /* colorful left border to distinguish cards */
     .card::before {
       content: '';
       position: absolute;
@@ -300,7 +298,6 @@
       min-height: 100px
     }
 
-    /* specifically space out salientes/entrantes to avoid amontonado */
     .counter-row {
       display: flex;
       gap: 12px
@@ -333,7 +330,6 @@
       color: var(--text)
     }
 
-    /* responsive modal layout for small screens */
     @media (max-width:800px) {
       .modal {
         width: 95%;
@@ -344,7 +340,7 @@
       }
     }
 
-    /* pdf controls small */
+    /* pdf */
     .pdf-controls {
       display: flex;
       gap: 8px;
@@ -419,7 +415,6 @@
 
     <div id="grid" class="grid" aria-live="polite"></div>
   </main>
-  <!-- right panel -->
   <div id="rightPanel" class="panel" aria-hidden="true">
     <div class="title" id="panelName">Agente</div>
     <div class="row">
@@ -441,7 +436,6 @@
     <div style="display:flex;justify-content:flex-end;margin-top:12px"><button id="panelEditBtn" class="btn">Editar
         (Shift+R)</button></div>
   </div>
-  <!-- modal -->
   <div id="overlay" class="overlay">
     <div class="modal" role="dialog" aria-modal="true">
       <h3 style="margin:0 0 8px 0">Registrar / Editar agente</h3>
@@ -450,6 +444,7 @@
           <label class="small-muted">Agente</label>
           <select id="formAgent" class="input"></select>
         </div>
+
         <div class="form-group">
           <label class="small-muted">Extensión</label>
           <input id="formExt" class="input" readonly />
@@ -462,6 +457,10 @@
           <label class="small-muted">Observaciones</label>
           <textarea id="formObs" class="input"></textarea>
         </div>
+        <div class="form-group">
+<label class="small-muted">Observaciones (PDF)</label>
+<input type="file" id="formPdf" accept="application/pdf" class="input">
+</div>
         <div style="grid-column:1/3">
           <div class="form-row">
             <div style="flex:1">
@@ -493,6 +492,38 @@
       </div>
     </div>
   </div>
+  <div id="pdfModal" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+z-index:2000;
+align-items:center;
+justify-content:center;
+">
+
+<div style="
+width:80%;
+height:80%;
+background:#0b1224;
+border-radius:10px;
+padding:10px;
+display:flex;
+flex-direction:column;
+">
+
+<div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+<strong>Observaciones (PDF)</strong>
+<button onclick="cerrarPDF()" class="btn ghost">Cerrar</button>
+</div>
+
+<iframe id="pdfViewer" style="flex:1;border:none;"></iframe>
+
+</div>
+</div>
   <!-- libs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -500,7 +531,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
   <script>
-    // Firebase — opción B: estructura limpia y consistente (recomendada)
     const firebaseConfig = {
       apiKey: "AIzaSyDeAbygOcoV1G9Zh8wd7topjXttlmJ892Y",
       authDomain: "workplace-18675.firebaseapp.com",
@@ -719,11 +749,9 @@
     const panelObs = document.getElementById('panelObs');
     const panelEditBtn = document.getElementById('panelEditBtn');
 
-    // defaults
     const today = new Date().toISOString().split('T')[0];
     pdfDateFrom.value = today; pdfDateTo.value = today; formDate.value = today;
 
-    // init selects
     function initSelects() {
       agentes.forEach(a => {
         const o = document.createElement('option'); o.value = String(a.ext); o.textContent = `${a.nombre} — ${a.ext}`; pdfAgentFilter.appendChild(o);
@@ -731,7 +759,6 @@
       });
     }
     initSelects();
-    // realtime cache
     let registros = [];
 
     db.collection("agentes_sabado").onSnapshot((snap) => {
@@ -749,11 +776,9 @@
 
     });
 
-    // helpers
     function toMinutes(h) { if (!h) return null; const p = h.split(':').map(Number); if (p.length < 2 || p.some(isNaN)) return null; return p[0] * 60 + p[1]; }
     function esc(s) { if (!s) return ''; return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
 
-    // render
     function renderGrid() {
 
       const q = searchInput.value.trim().toLowerCase();
@@ -776,13 +801,10 @@
         const entrantes = rec.entrantes ?? 0;
         const obs = rec.observaciones || "";
 
-        // buscar horario del agente
         const agent = agentes.find(a => String(a.ext) === ext);
         const horario = agent ? obtenerHorarioAgente(agent) : "08:00";
-        // filtro por agente
         if (selectedAgent !== "all" && ext !== selectedAgent) return;
 
-        // filtro por fecha
         if (from) {
           if (rec.fecha < from) return;
         }
@@ -790,14 +812,12 @@
         if (to) {
           if (rec.fecha > to) return;
         }
-        // búsqueda
         if (q) {
           const inName = name.toLowerCase().includes(q);
           const inExt = ext.includes(q);
           if (!inName && !inExt) return;
         }
 
-        // estado
         let estado = "Sin marcar";
         let badgeColor = "var(--muted)";
 
@@ -822,13 +842,12 @@
 
         }
 
-        // filtros de estado
         if (filter === "puntual" && badgeColor !== "var(--green)") return;
         if (filter === "leve" && badgeColor !== "var(--accent)") return;
         if (filter === "retraso" && badgeColor !== "var(--red)") return;
         if (filter === "sinmarcar" && login) return;
 
-        // crear tarjeta
+        // tarjsta
         const wrap = document.createElement("div");
         wrap.className = "card-wrap";
 
@@ -863,7 +882,10 @@
         </div>
       </div>
 
-      <div class="note">${esc(obs || "Sin observaciones")}</div>
+      <div class="note">
+${esc(obs || "Sin observaciones")}
+${rec.pdf ? `<br><button onclick="abrirPDF('${rec.pdf}')" class="btn ghost">📎 Ver PDF</button>` : ""}
+</div>
     `;
 
         wrap.appendChild(c);
@@ -878,7 +900,7 @@
     function showModal(ext) { overlayEl.classList.add('show'); const sel = ext || formAgent.value || String(agentes[0].ext); formAgent.value = String(sel); formExt.value = String(sel); const rec = latestData[String(sel)] || {}; formDate.value = rec.fecha || today; formLogin.value = rec.login || ''; formLogout.value = rec.logout || ''; formSalientes.value = rec.salientes ?? ''; formEntrantes.value = rec.entrantes ?? ''; formObs.value = rec.observaciones || ''; }
     function hideModal() { overlayEl.classList.remove('show'); }
 
-    // populate modal agent select
+    //  modal agent select
     function initModal() { agentes.forEach(a => { const o = document.createElement('option'); o.value = String(a.ext); o.textContent = `${a.nombre} — ${a.ext}`; formAgent.appendChild(o); }); }
     initModal();
 
@@ -890,6 +912,19 @@
 
     // save
     saveBtn.addEventListener('click', async () => {
+    const pdfFile = document.getElementById("formPdf").files[0];
+let pdfBase64 = "";
+
+if (pdfFile) {
+
+  const reader = new FileReader();
+
+  pdfBase64 = await new Promise((resolve) => {
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(pdfFile);
+  });
+
+}
       const ext = String(formAgent.value); const agent = agentes.find(a => String(a.ext) === ext); if (!agent) { alert('Agente inválido'); return; }
       const login = formLogin.value.trim(); if (!login) { alert('Ingresa Log in'); return; }
       const logout = formLogout.value.trim(); const salientes = Number(formSalientes.value || 0); const entrantes = Number(formEntrantes.value || 0); const obs = formObs.value.trim(); const fecha = formDate.value || today;
@@ -905,6 +940,7 @@
           salientes,
           entrantes,
           observaciones: obs,
+          pdf: pdfBase64,
           timestamp: Date.now()
         }); hideModal();
       } catch (err) { console.error('Guardar', err); alert('Error al guardar. Revise consola.'); }
@@ -937,14 +973,12 @@
           .filter(r => String(r.extension) === String(agent.ext))
           .sort((a, b) => b.timestamp - a.timestamp)[0]; if (!rec) continue;
 
-        // filtro de fechas
         if (from || to) {
           const rDate = new Date(rec.fecha || '');
           if (from && rDate < new Date(from)) continue;
           if (to && rDate > new Date(to + 'T23:59:59')) continue;
         }
 
-        // 🔥 CALCULAR ESTADO CON HORARIO REAL
         let estado = 'Sin marcar';
 
         if (rec.login) {
@@ -1024,7 +1058,25 @@
 
       doc.save(`reporte_agentes_${from || 'all'}_a_${to || 'all'}.pdf`);
     });
+function abrirPDF(base64){
 
+  const modal = document.getElementById("pdfModal");
+  const viewer = document.getElementById("pdfViewer");
+
+  viewer.src = base64;
+  modal.style.display = "flex";
+
+}
+
+function cerrarPDF(){
+
+  const modal = document.getElementById("pdfModal");
+  const viewer = document.getElementById("pdfViewer");
+
+  viewer.src = "";
+  modal.style.display = "none";
+
+}
     // initial render
     renderGrid();
   </script>

@@ -6,376 +6,472 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dashboard — Agentes</title>
   <style>
-    :root {
-      --bg: #08101a;
-      --panel: #0e1720;
-      --card: #0f1a24;
-      --card-2: #111827;
-      --accent: #f59e0b;
-      /* naranja/amarillo */
-      --accent-2: #ffb86b;
-      --muted: #9aa6b2;
-      --glass: rgba(255, 255, 255, 0.04);
-      --green: #16a34a;
-      --red: #ef4444;
-      --text: #e6eef8;
-    }
+:root {
+  --bg: #08101a;
+  --panel: #0e1720;
+  --card: #0f1a24;
+  --card-2: #111827;
+  --accent: #f59e0b;
+  --accent-2: #ffb86b;
+  --muted: #94a3b8;
+  --glass: rgba(255, 255, 255, 0.04);
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --text: #e6eef8;
+  --line: rgba(255, 255, 255, 0.06);
+}
 
-    * {
-      box-sizing: border-box;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial
-    }
+* {
+  box-sizing: border-box;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
 
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      background: linear-gradient(180deg, #071026 0%, #07111b 100%);
-      color: var(--text)
-    }
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(245, 158, 11, 0.08), transparent 28%),
+    linear-gradient(180deg, #07111f 0%, #08101a 100%);
+  color: var(--text);
+}
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.01), transparent)
-    }
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(8, 16, 26, 0.88);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
 
-    h1 {
-      font-size: 18px;
-      margin: 0;
-      font-weight: 800
-    }
+h1 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+}
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px
-    }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    .select,
-    .input {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      color: var(--text);
-      padding: 8px;
-      border-radius: 8px
-    }
+.select,
+.input,
+select,
+textarea {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: .18s ease;
+}
 
-    .btn {
-      background: linear-gradient(180deg, var(--accent), var(--accent-2));
-      border: none;
-      color: #08101a;
-      padding: 8px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 800
-    }
+.select:hover,
+.input:hover,
+select:hover,
+textarea:hover {
+  border-color: rgba(245, 158, 11, 0.35);
+}
 
-    .btn.ghost {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      color: var(--muted)
-    }
+.select:focus,
+.input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
+}
 
-    .container {
-      max-width: 1200px;
-      margin: 18px auto;
-      padding: 12px
-    }
+.btn {
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border: none;
+  color: #08101a;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.22);
+}
 
-    .controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 12px
-    }
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(245, 158, 11, 0.30);
+}
 
-    .search {
-      flex: 1;
-      min-width: 180px
-    }
+.btn.ghost {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  color: var(--text);
+  box-shadow: none;
+}
 
-    /* grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px
-    }
+.btn.ghost:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+}
 
-    /* card */
-    .card {
-      background: linear-gradient(180deg, var(--card), var(--card-2));
-      border-radius: 12px;
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.03);
-      box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
-      transition: transform .15s, box-shadow .15s
-    }
+.container {
+  max-width: 1280px;
+  margin: 20px auto;
+  padding: 14px;
+}
 
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.7)
-    }
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+}
 
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px
-    }
+.search {
+  flex: 1;
+  min-width: 220px;
+}
 
-    .avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #242f3a, #16324a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: var(--accent);
-      box-shadow: inset 0 -6px 18px rgba(0, 0, 0, 0.4)
-    }
+/* grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
 
-    .agent {
-      font-weight: 800
-    }
+/* card */
+.card-wrap {
+  position: relative;
+}
 
-    .ext {
-      font-size: 12px;
-      color: var(--muted)
-    }
+.card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(15, 26, 36, 0.98), rgba(17, 24, 39, 0.98));
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.45);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  overflow: hidden;
+}
 
-    .state {
-      font-weight: 800;
-      font-size: 14px;
-      letter-spacing: 0.3px;
-    }
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.52);
+  border-color: rgba(245, 158, 11, 0.18);
+}
 
-    .stat .value {
-      font-weight: 900;
-      font-size: 16px;
-    }
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 4px;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(180deg, var(--accent), #ff8c42);
+}
 
-    .stats {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px
-    }
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
 
-    .stat {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.02);
-      padding: 8px;
-      border-radius: 8px;
-      text-align: center
-    }
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1f2d3d, #16324a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 17px;
+  color: var(--accent);
+  box-shadow: inset 0 -6px 14px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
 
-    .stat .label {
-      font-size: 12px;
-      color: var(--muted)
-    }
+.agent {
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1.15;
+}
 
-    .stat .value {
-      font-weight: 800;
-      margin-top: 4px
-    }
+.ext {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 1px;
+}
 
-    .note {
-      margin-top: 10px;
-      padding: 8px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.02);
-      color: var(--muted);
-      font-size: 13px
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      border-radius: 12px 0 0 12px;
-      background: linear-gradient(180deg, var(--accent), #ff8c42);
-      transform: translateX(-8px);
-      opacity: 0.95
-    }
+.state {
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+}
 
-    .card-wrap {
-      position: relative
-    }
+.stats {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
 
-    /* right panel */
-    .panel {
-      position: fixed;
-      right: 18px;
-      top: 80px;
-      width: 380px;
-      max-width: 92%;
-      background: linear-gradient(180deg, #071028, #0b1224);
-      border-radius: 12px;
-      padding: 14px;
-      border-left: 1px solid rgba(255, 255, 255, 0.03);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-      display: none;
-      z-index: 1200
-    }
+.stat {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 6px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.03);
+}
 
-    .panel.show {
-      display: block
-    }
+.stat .label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
 
-    .panel .title {
-      font-weight: 800
-    }
+.stat .value {
+  font-weight: 900;
+  font-size: 14px;
+  color: var(--text);
+}
 
-    .panel .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 8px
-    }
+.note {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.3;
+  border: 1px solid rgba(255,255,255,0.03);
+}
 
-    /* modal */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(3, 7, 18, 0.65);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1400
-    }
+.note strong {
+  color: var(--text);
+  display: inline-block;
+  margin-bottom: 3px;
+}
 
-    .overlay.show {
-      display: flex
-    }
+.note button {
+  margin-top: 6px;
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+.obs-box {
+  min-height: 54px;
+  max-height: 54px;
+  overflow: hidden;
+}
 
-    .modal {
-      width: 720px;
-      max-width: 94%;
-      background: linear-gradient(180deg, #0b1220, #071028);
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6)
-    }
+.doc-box {
+  min-height: 58px;
+  max-height: 58px;
+  overflow: hidden;
+}
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px
-    }
+.doc-box .btn {
+  width: 100%;
+  margin-top: 6px;
+}
 
-    .form-row {
-      display: flex;
-      gap: 12px
-    }
+.card .note:last-child {
+  margin-top: auto;
+}
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px
-    }
+/* right panel */
+.panel {
+  position: fixed;
+  right: 18px;
+  top: 84px;
+  width: 380px;
+  max-width: 92%;
+  background: linear-gradient(180deg, #071028, #0b1224);
+  border-radius: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  display: none;
+  z-index: 1200;
+}
 
-    .input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      background: transparent;
-      color: var(--text)
-    }
+.panel.show {
+  display: block;
+}
 
-    textarea {
-      min-height: 100px
-    }
+.panel .title {
+  font-weight: 900;
+  font-size: 18px;
+}
 
-    .counter-row {
-      display: flex;
-      gap: 12px
-    }
+.panel .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
 
-    .counter {
-      flex: 1;
-      background: linear-gradient(180deg, #07111a, #091525);
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.03);
-      display: flex;
-      flex-direction: column;
-      align-items: center
-    }
+/* modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.72);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1400;
+  backdrop-filter: blur(4px);
+}
 
-    .counter label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px
-    }
+.overlay.show {
+  display: flex;
+}
 
-    .counter input {
-      width: 100%;
-      text-align: center;
-      padding: 6px;
-      border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.03);
-      background: transparent;
-      color: var(--text)
-    }
+.modal {
+  width: 720px;
+  max-width: 94%;
+  background: linear-gradient(180deg, #0b1220, #071028);
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
 
-    @media (max-width:800px) {
-      .modal {
-        width: 95%;
-      }
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
 
-      .form-grid {
-        grid-template-columns: 1fr
-      }
-    }
+.form-row {
+  display: flex;
+  gap: 12px;
+}
 
-    /* pdf */
-    .pdf-controls {
-      display: flex;
-      gap: 8px;
-      align-items: center
-    }
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-    .small-muted {
-      font-size: 12px;
-      color: var(--muted)
-    }
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
 
-    select option {
-      background: #0b1224;
-      color: #ffffff;
-    }
+.counter-row {
+  display: flex;
+  gap: 12px;
+}
 
-    select:focus {
-      outline: none;
-      border: 1px solid var(--accent);
-    }
+.counter {
+  flex: 1;
+  background: linear-gradient(180deg, #07111a, #091525);
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    select option:checked {
-      background: #1e293b;
-      color: #ffffff;
-    }
+.counter label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
 
-    select:focus {
-      outline: none;
-      border: 1px solid var(--accent);
-    }
+.counter input {
+  width: 100%;
+  text-align: center;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+}
 
-    select option:checked {
-      background: #1e293b;
-      color: #ffffff;
-    }
+/* pdf */
+.pdf-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.small-muted {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+select option {
+  background: #0b1224;
+  color: #ffffff;
+}
+
+#pdfModal > div {
+  width: 82%;
+  height: 82%;
+  background: #0b1224;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+}
+
+#pdfViewer {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  background: white;
+}
+
+@media (max-width: 800px) {
+  .modal {
+    width: 95%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .controls {
+    padding: 12px;
+  }
+
+  header {
+    padding: 12px 14px;
+  }
+
+  h1 {
+    font-size: 17px;
+  }
+}
+
   </style>
 </head>
 
@@ -458,9 +554,9 @@
           <textarea id="formObs" class="input"></textarea>
         </div>
         <div class="form-group">
-<label class="small-muted">Observaciones (PDF)</label>
-<input type="file" id="formPdf" accept="application/pdf" class="input">
-</div>
+          <label class="small-muted">Observaciones (PDF)</label>
+          <input type="file" id="formPdf" accept="application/pdf" class="input">
+        </div>
         <div style="grid-column:1/3">
           <div class="form-row">
             <div style="flex:1">
@@ -505,7 +601,7 @@ align-items:center;
 justify-content:center;
 ">
 
-<div style="
+    <div style="
 width:80%;
 height:80%;
 background:#0b1224;
@@ -515,15 +611,15 @@ display:flex;
 flex-direction:column;
 ">
 
-<div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-<strong>Observaciones (PDF)</strong>
-<button onclick="cerrarPDF()" class="btn ghost">Cerrar</button>
-</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <strong>Observaciones (PDF)</strong>
+        <button onclick="cerrarPDF()" class="btn ghost">Cerrar</button>
+      </div>
 
-<iframe id="pdfViewer" style="flex:1;border:none;"></iframe>
+      <iframe id="pdfViewer" style="flex:1;border:none;"></iframe>
 
-</div>
-</div>
+    </div>
+  </div>
   <!-- libs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -778,7 +874,12 @@ flex-direction:column;
 
     function toMinutes(h) { if (!h) return null; const p = h.split(':').map(Number); if (p.length < 2 || p.some(isNaN)) return null; return p[0] * 60 + p[1]; }
     function esc(s) { if (!s) return ''; return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
-
+    function formatearSegundos(segundos) {
+      const total = Number(segundos || 0);
+      const min = Math.floor(total / 60);
+      const sec = total % 60;
+      return `${min}:${String(sec).padStart(2, "0")}`;
+    }
     function renderGrid() {
 
       const q = searchInput.value.trim().toLowerCase();
@@ -797,6 +898,8 @@ flex-direction:column;
 
         const login = rec.login || "";
         const logout = rec.logout || "";
+        const tiempoBanio = rec.tiempoBanio ?? 0;
+        const tiempoAlmuerzo = rec.tiempoAlmuerzo ?? 0;
         const salientes = rec.salientes ?? 0;
         const entrantes = rec.entrantes ?? 0;
         const obs = rec.observaciones || "";
@@ -855,50 +958,102 @@ flex-direction:column;
         c.className = "card";
 
         c.innerHTML = `
-      <div class="card-header">
-        <div style="display:flex;gap:10px;align-items:center">
-          <div class="avatar">${name.charAt(0)}</div>
-          <div>
-            <div class="agent">${esc(name)}</div>
-            <div class="ext">Ext ${ext} • ${rec.fecha}</div>
-          </div>
-        </div>
-
-        <div style="text-align:right">
-          <div class="state" style="color:${badgeColor}">${estado}</div>
-          <div class="ext">${login || "-"} • ${logout || "-"}</div>
-        </div>
+  <div class="card-header">
+    <div style="display:flex;gap:10px;align-items:center">
+      <div class="avatar">${name.charAt(0)}</div>
+      <div>
+        <div class="agent">${esc(name)}</div>
+        <div class="ext">Ext ${ext} • ${rec.fecha}</div>
       </div>
+    </div>
 
-      <div class="stats">
-        <div class="stat">
-          <div class="label">Salientes</div>
-          <div class="value">${salientes}</div>
-        </div>
+    <div style="text-align:right">
+      <div class="state" style="color:${badgeColor}">${estado}</div>
+      <div class="ext">${login || "-"} • ${logout || "-"}</div>
+    </div>
+  </div>
 
-        <div class="stat">
-          <div class="label">Entrantes</div>
-          <div class="value">${entrantes}</div>
-        </div>
-      </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="label">Baño</div>
+      <div class="value">${formatearSegundos(rec.tiempoBanio || 0)}</div>
+    </div>
 
-      <div class="note">
-${esc(obs || "Sin observaciones")}
-${rec.pdf ? `<br><button onclick="abrirPDF('${rec.pdf}')" class="btn ghost">📎 Ver PDF</button>` : ""}
-</div>
-    `;
+    <div class="stat">
+      <div class="label">Almuerzo</div>
+      <div class="value">${formatearSegundos(rec.tiempoAlmuerzo || 0)}</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="label">Salientes</div>
+      <div class="value">${salientes}</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Entrantes</div>
+      <div class="value">${entrantes}</div>
+    </div>
+  </div>
+
+  <div class="note obs-box">
+    <strong>Observaciones:</strong><br>
+    ${esc(obs || "Sin observaciones")}
+  </div>
+
+  <div class="note doc-box">
+    <strong>Documento adjunto:</strong><br>
+    ${rec.pdf ? `<button onclick="event.stopPropagation(); abrirPDF('${rec.pdf}')" class="btn ghost">📎 Ver PDF</button>` : "Sin documento adjunto"}
+  </div>
+`;
 
         wrap.appendChild(c);
         grid.appendChild(wrap);
-
+c.style.cursor = "pointer";
+c.addEventListener("click", () => {
+  showModal(rec.id);
+});
       });
 
     }
     function openPanel(ext) { const agent = agentes.find(a => String(a.ext) === String(ext)); const rec = latestData[String(ext)] || {}; panelName.textContent = agent.nombre; panelExt.textContent = 'Ext: ' + agent.ext + (rec.fecha ? ' • ' + rec.fecha : ''); panelTimes.textContent = `${rec.login || '-'} • ${rec.logout || '-'}`; panelSalientes.textContent = rec.salientes ?? 0; panelEntrantes.textContent = rec.entrantes ?? 0; panelObs.textContent = rec.observaciones || 'Sin observación'; panelState.textContent = (() => { if (!rec.login) return 'Sin marcar'; const lm = toMinutes(rec.login); if (lm === null) return 'Hora inválida'; if (lm <= 8 * 60) return 'Puntual'; const r = lm - 8 * 60; return 'Retraso ' + r + ' min'; })(); rightPanel.classList.add('show'); panelEditBtn.onclick = () => showModal(ext); }
 
     // modal
-    function showModal(ext) { overlayEl.classList.add('show'); const sel = ext || formAgent.value || String(agentes[0].ext); formAgent.value = String(sel); formExt.value = String(sel); const rec = latestData[String(sel)] || {}; formDate.value = rec.fecha || today; formLogin.value = rec.login || ''; formLogout.value = rec.logout || ''; formSalientes.value = rec.salientes ?? ''; formEntrantes.value = rec.entrantes ?? ''; formObs.value = rec.observaciones || ''; }
-    function hideModal() { overlayEl.classList.remove('show'); }
+function showModal(docId) {
+  overlayEl.classList.add('show');
+
+  let rec = null;
+
+  if (docId) {
+    rec = registros.find(r => r.id === docId);
+  }
+
+  if (rec) {
+    formAgent.value = String(rec.extension);
+    formExt.value = String(rec.extension);
+    formDate.value = rec.fecha || today;
+    formLogin.value = rec.login || '';
+    formLogout.value = rec.logout || '';
+    formSalientes.value = rec.salientes ?? '';
+    formEntrantes.value = rec.entrantes ?? '';
+    formObs.value = rec.observaciones || '';
+    saveBtn.dataset.editingId = rec.id;
+  } else {
+    const sel = formAgent.value || String(agentes[0].ext);
+    formAgent.value = sel;
+    formExt.value = sel;
+    formDate.value = today;
+    formLogin.value = '';
+    formLogout.value = '';
+    formSalientes.value = '';
+    formEntrantes.value = '';
+    formObs.value = '';
+    saveBtn.dataset.editingId = '';
+  }
+
+  document.getElementById("formPdf").value = "";
+}    function hideModal() { overlayEl.classList.remove('show'); }
 
     //  modal agent select
     function initModal() { agentes.forEach(a => { const o = document.createElement('option'); o.value = String(a.ext); o.textContent = `${a.nombre} — ${a.ext}`; formAgent.appendChild(o); }); }
@@ -911,40 +1066,67 @@ ${rec.pdf ? `<br><button onclick="abrirPDF('${rec.pdf}')" class="btn ghost">📎
     formAgent.addEventListener('change', () => formExt.value = formAgent.value);
 
     // save
-    saveBtn.addEventListener('click', async () => {
-    const pdfFile = document.getElementById("formPdf").files[0];
-let pdfBase64 = "";
+ saveBtn.addEventListener('click', async () => {
+  const pdfFile = document.getElementById("formPdf").files[0];
+  let pdfBase64 = "";
 
-if (pdfFile) {
+  const ext = String(formAgent.value);
+  const agent = agentes.find(a => String(a.ext) === ext);
+  if (!agent) {
+    alert('Agente inválido');
+    return;
+  }
 
-  const reader = new FileReader();
+  const login = formLogin.value.trim();
+  if (!login) {
+    alert('Ingresa Log in');
+    return;
+  }
 
-  pdfBase64 = await new Promise((resolve) => {
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(pdfFile);
-  });
+  const logout = formLogout.value.trim();
+  const salientes = Number(formSalientes.value || 0);
+  const entrantes = Number(formEntrantes.value || 0);
+  const obs = formObs.value.trim();
+  const fecha = formDate.value || today;
 
-}
-      const ext = String(formAgent.value); const agent = agentes.find(a => String(a.ext) === ext); if (!agent) { alert('Agente inválido'); return; }
-      const login = formLogin.value.trim(); if (!login) { alert('Ingresa Log in'); return; }
-      const logout = formLogout.value.trim(); const salientes = Number(formSalientes.value || 0); const entrantes = Number(formEntrantes.value || 0); const obs = formObs.value.trim(); const fecha = formDate.value || today;
-      try {
-        const docId = `${ext}_${fecha}`;
+  try {
+    const docId = `${ext}_${fecha}`;
 
-        await db.collection('agentes_sabado').doc(docId).set({
-          nombre: agent.nombre,
-          extension: Number(ext),
-          fecha,
-          login,
-          logout,
-          salientes,
-          entrantes,
-          observaciones: obs,
-          pdf: pdfBase64,
-          timestamp: Date.now()
-        }); hideModal();
-      } catch (err) { console.error('Guardar', err); alert('Error al guardar. Revise consola.'); }
-    });
+    const existente = registros.find(r => r.id === docId);
+    let pdfFinal = existente?.pdf || "";
+
+    if (pdfFile) {
+      const reader = new FileReader();
+      pdfBase64 = await new Promise((resolve) => {
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(pdfFile);
+      });
+      pdfFinal = pdfBase64;
+    }
+
+    await db.collection('agentes_sabado').doc(docId).set({
+      nombre: agent.nombre,
+      extension: Number(ext),
+      fecha,
+      login,
+      logout,
+      salientes,
+      entrantes,
+      observaciones: obs,
+      pdf: pdfFinal,
+      tiempoBanio: existente?.tiempoBanio ?? 0,
+      tiempoAlmuerzo: existente?.tiempoAlmuerzo ?? 0,
+      tiempoBanioTexto: existente?.tiempoBanioTexto ?? "0:00",
+      tiempoAlmuerzoTexto: existente?.tiempoAlmuerzoTexto ?? "0:00",
+      timestamp: Date.now()
+    }, { merge: true });
+
+    hideModal();
+  } catch (err) {
+    console.error('Guardar', err);
+    alert('Error al guardar. Revise consola.');
+  }
+});
 
     // filters
     searchInput.addEventListener('input', renderGrid);
@@ -954,129 +1136,132 @@ if (pdfFile) {
     pdfDateFrom.addEventListener('change', renderGrid);
     pdfDateTo.addEventListener('change', renderGrid);
     // pdf
-    document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p', 'mm', 'a4');
 
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF('p', 'mm', 'a4');
+  const from = pdfDateFrom.value;
+  const to = pdfDateTo.value;
+  const selected = pdfAgentFilter.value;
 
-      const from = pdfDateFrom.value;
-      const to = pdfDateTo.value;
-      const selected = pdfAgentFilter.value;
+  const rows = [];
 
-      const rows = [];
+  const registrosFiltrados = registros
+    .filter(rec => {
+      const ext = String(rec.extension);
 
-      for (const agent of agentes) {
+      if (selected !== 'all' && ext !== String(selected)) return false;
+      if (from && rec.fecha < from) return false;
+      if (to && rec.fecha > to) return false;
 
-        if (selected !== 'all' && String(agent.ext) !== String(selected)) continue;
+      return true;
+    })
+    .sort((a, b) => {
+      if (a.fecha === b.fecha) return String(a.extension).localeCompare(String(b.extension));
+      return a.fecha.localeCompare(b.fecha);
+    });
 
-        const rec = registros
-          .filter(r => String(r.extension) === String(agent.ext))
-          .sort((a, b) => b.timestamp - a.timestamp)[0]; if (!rec) continue;
+  registrosFiltrados.forEach(rec => {
+    const agent = agentes.find(a => String(a.ext) === String(rec.extension));
+    const horario = agent ? obtenerHorarioAgente(agent) : "08:00";
 
-        if (from || to) {
-          const rDate = new Date(rec.fecha || '');
-          if (from && rDate < new Date(from)) continue;
-          if (to && rDate > new Date(to + 'T23:59:59')) continue;
-        }
+    let estado = 'Sin marcar';
 
-        let estado = 'Sin marcar';
+    if (rec.login) {
+      const lm = toMinutes(rec.login);
+      const hm = toMinutes(horario || "08:00");
 
-        if (rec.login) {
+      if (lm === null) {
+        estado = 'Hora inválida';
+      } else if (lm <= hm) {
+        estado = 'Puntual';
+      } else {
+        const r = lm - hm;
+        estado = 'Retraso ' + r + ' min';
+      }
+    }
 
-          const lm = toMinutes(rec.login);
-          const hm = toMinutes(obtenerHorarioAgente(agent) || "08:00");
-          if (lm === null) {
-            estado = 'Hora inválida';
-          }
-          else if (lm <= hm) {
-            estado = 'Puntual';
-          }
-          else {
-            const r = lm - hm;
-            estado = 'Retraso ' + r + ' min';
-          }
-        }
+    rows.push({
+      main: [
+        rec.nombre || '',
+        rec.extension || '',
+        rec.fecha || '',
+        rec.login || '',
+        rec.logout || '',
+        rec.tiempoBanioTexto || '0:00',
+        rec.tiempoAlmuerzoTexto || '0:00',
+        rec.salientes || 0,
+        rec.entrantes || 0,
+        estado
+      ],
+      obs: rec.observaciones || ''
+    });
+  });
 
-        rows.push({
-          main: [
-            rec.nombre || agent.nombre,
-            rec.extension || agent.ext,
-            rec.fecha || '',
-            rec.login || '',
-            rec.logout || '',
-            rec.salientes || 0,
-            rec.entrantes || 0,
-            estado
-          ],
-          obs: rec.observaciones || ''
-        });
+  doc.setFontSize(14);
+  doc.text('Reporte De Agentes', 105, 14, null, null, 'center');
+
+  doc.setFontSize(10);
+  doc.text(`Rango: ${from || '...'} a ${to || '...'}`, 105, 20, null, null, 'center');
+
+  const body = [];
+
+  rows.forEach(r => {
+    body.push(r.main);
+    body.push([{
+      content: 'Observaciones: ' + (r.obs || 'Sin observación'),
+      colSpan: 10,
+      styles: { halign: 'left' }
+    }]);
+  });
+
+  doc.autoTable({
+    startY: 26,
+    head: [['Nombre', 'Ext', 'Fecha', 'Log in', 'Log out', 'Baño', 'Almuerzo', 'Salientes', 'Entrantes', 'Estado']],
+    body: body,
+    styles: { fontSize: 8, cellPadding: 3, halign: 'center', valign: 'middle' },
+    headStyles: { fillColor: [37, 99, 235], textColor: 255 },
+
+    didParseCell: function (data) {
+      if (data.section === 'body' && data.column.index === 9) {
+        const val = String(data.cell.raw || '');
+        if (val.startsWith('Retraso')) data.cell.styles.textColor = [220, 38, 38];
+        if (val === 'Sin marcar') data.cell.styles.textColor = [130, 130, 130];
       }
 
-      // título
-      doc.setFontSize(14);
-      doc.text('Reporte De Agentes Sabado', 105, 14, null, null, 'center');
+      if (
+        data.section === 'body' &&
+        typeof data.cell.raw === 'string' &&
+        data.cell.raw.startsWith('Observaciones:')
+      ) {
+        data.cell.styles.halign = 'left';
+        data.cell.styles.fontStyle = 'italic';
+        data.cell.styles.textColor = [200, 200, 200];
+      }
+    }
+  });
 
-      doc.setFontSize(10);
-      doc.text(`Rango: ${from || '...'} a ${to || '...'}`, 105, 20, null, null, 'center');
+  doc.save(`reporte_agentes_${from || 'all'}_a_${to || 'all'}.pdf`);
+});
+    function abrirPDF(base64) {
 
-      const body = [];
+      const modal = document.getElementById("pdfModal");
+      const viewer = document.getElementById("pdfViewer");
 
-      rows.forEach(r => {
-        body.push(r.main);
-        body.push([{
-          content: 'Observaciones: ' + (r.obs || 'Sin observación'),
-          colSpan: 8,
-          styles: { halign: 'left' }
-        }]);
-      });
+      viewer.src = base64;
+      modal.style.display = "flex";
 
-      doc.autoTable({
-        startY: 26,
-        head: [['Nombre', 'Ext', 'Fecha', 'Log in', 'Log out', 'Salientes', 'Entrantes', 'Estado']],
-        body: body,
-        styles: { fontSize: 9, cellPadding: 4, halign: 'center', valign: 'middle' },
-        headStyles: { fillColor: [37, 99, 235], textColor: 255 },
+    }
 
-        didParseCell: function (data) {
+    function cerrarPDF() {
 
-          if (data.section === 'body' && data.column.index === 7) {
-            const val = String(data.cell.raw || '');
-            if (val.startsWith('Retraso')) data.cell.styles.textColor = [220, 38, 38];
-            if (val === 'Sin marcar') data.cell.styles.textColor = [130, 130, 130];
-          }
+      const modal = document.getElementById("pdfModal");
+      const viewer = document.getElementById("pdfViewer");
 
-          if (data.section === 'body' &&
-            typeof data.cell.raw === 'string' &&
-            data.cell.raw.startsWith('Observaciones:')) {
+      viewer.src = "";
+      modal.style.display = "none";
 
-            data.cell.styles.halign = 'left';
-            data.cell.styles.fontStyle = 'italic';
-            data.cell.styles.textColor = [200, 200, 200];
-          }
-        }
-      });
-
-      doc.save(`reporte_agentes_${from || 'all'}_a_${to || 'all'}.pdf`);
-    });
-function abrirPDF(base64){
-
-  const modal = document.getElementById("pdfModal");
-  const viewer = document.getElementById("pdfViewer");
-
-  viewer.src = base64;
-  modal.style.display = "flex";
-
-}
-
-function cerrarPDF(){
-
-  const modal = document.getElementById("pdfModal");
-  const viewer = document.getElementById("pdfViewer");
-
-  viewer.src = "";
-  modal.style.display = "none";
-
-}
+    }
     // initial render
     renderGrid();
   </script>

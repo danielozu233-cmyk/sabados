@@ -856,22 +856,55 @@ flex-direction:column;
       });
     }
     initSelects();
-    let registros = [];
+let registros = [];
+let cargando = false;
 
-    db.collection("agentes_sabado").onSnapshot((snap) => {
+async function cargarRegistros() {
+  if (cargando) return;
+  cargando = true;
 
-      registros = [];
+  try {
+    let consulta = db.collection("agentes_sabado");
 
-      snap.forEach(doc => {
-        registros.push({
-          id: doc.id,
-          ...doc.data()
-        });
+    const from = pdfDateFrom.value;
+    const to = pdfDateTo.value;
+    const selected = pdfAgentFilter.value;
+
+    if (from) {
+      consulta = consulta.where("fecha", ">=", from);
+    }
+
+    if (to) {
+      consulta = consulta.where("fecha", "<=", to);
+    }
+
+    if (selected !== "all") {
+      consulta = consulta.where("extension", "==", Number(selected));
+    }
+
+    const snap = await consulta.get();
+
+    registros = [];
+    snap.forEach(doc => {
+      registros.push({
+        id: doc.id,
+        ...doc.data()
       });
-
-      renderGrid();
-
     });
+
+    registros.sort((a, b) => {
+      if (a.fecha === b.fecha) return String(a.extension).localeCompare(String(b.extension));
+      return b.fecha.localeCompare(a.fecha);
+    });
+
+    renderGrid();
+
+  } catch (error) {
+    console.error("Error cargando registros:", error);
+  } finally {
+    cargando = false;
+  }
+}
 
     function toMinutes(h) { if (!h) return null; const p = h.split(':').map(Number); if (p.length < 2 || p.some(isNaN)) return null; return p[0] * 60 + p[1]; }
     function esc(s) { if (!s) return ''; return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
@@ -1123,6 +1156,7 @@ flex-direction:column;
         }, { merge: true });
 
         hideModal();
+await cargarRegistros();
       } catch (err) {
         console.error('Guardar', err);
         alert('Error al guardar. Revise consola.');
@@ -1130,12 +1164,13 @@ flex-direction:column;
     });
 
     // filters
-    searchInput.addEventListener('input', renderGrid);
-    filterSelect.addEventListener('change', renderGrid);
-    compactCheckbox.addEventListener('change', renderGrid);
-    pdfAgentFilter.addEventListener('change', renderGrid);
-    pdfDateFrom.addEventListener('change', renderGrid);
-    pdfDateTo.addEventListener('change', renderGrid);
+searchInput.addEventListener('input', renderGrid);
+filterSelect.addEventListener('change', renderGrid);
+compactCheckbox.addEventListener('change', renderGrid);
+
+pdfAgentFilter.addEventListener('change', cargarRegistros);
+pdfDateFrom.addEventListener('change', cargarRegistros);
+pdfDateTo.addEventListener('change', cargarRegistros);
     // pdf
     document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
       const { jsPDF } = window.jspdf;
@@ -1264,7 +1299,7 @@ flex-direction:column;
 
     }
     // initial render
-    renderGrid();
+    cargarRegistros();
   </script>
 </body>
 

@@ -554,8 +554,9 @@
           <textarea id="formObs" class="input"></textarea>
         </div>
         <div class="form-group">
-          <label class="small-muted">Observaciones (PDF)</label>
-          <input type="file" id="formPdf" accept="application/pdf" class="input">
+<label class="small-muted">Archivo adjunto</label>
+<input type="file" id="formArchivo" class="input">
+<div class="small-muted">Máximo recomendado: 700 KB</div>
         </div>
         <div style="grid-column:1/3">
           <div class="form-row">
@@ -1041,10 +1042,12 @@ const horario = agent ? obtenerHorarioAgente(agent, rec.fecha) : "08:00";
     ${esc(obs || "Sin observaciones")}
   </div>
 
-  <div class="note doc-box">
-    <strong>Documento adjunto:</strong><br>
-    ${rec.pdf ? `<button onclick="event.stopPropagation(); abrirPDF('${rec.pdf}')" class="btn ghost">📎 Ver PDF</button>` : "Sin documento adjunto"}
-  </div>
+<div class="note doc-box">
+  <strong>Archivo adjunto:</strong><br>
+  ${rec.archivoData && rec.archivoNombre
+    ? `<button onclick="event.stopPropagation(); abrirArchivo('${rec.archivoData}', '${esc(rec.archivoNombre)}')" class="btn ghost">📎 Ver / Descargar archivo</button>`
+    : "Sin archivo adjunto"}
+</div>
 `;
 
         wrap.appendChild(c);
@@ -1133,68 +1136,80 @@ function openPanel(ext) {
     formAgent.addEventListener('change', () => formExt.value = formAgent.value);
 
     // save
-    saveBtn.addEventListener('click', async () => {
-      const pdfFile = document.getElementById("formPdf").files[0];
-      let pdfBase64 = "";
+saveBtn.addEventListener('click', async () => {
+  const archivoFile = document.getElementById("formArchivo").files[0];
+  let archivoBase64 = "";
 
-      const ext = String(formAgent.value);
-      const agent = agentes.find(a => String(a.ext) === ext);
-      if (!agent) {
-        alert('Agente inválido');
+  const ext = String(formAgent.value);
+  const agent = agentes.find(a => String(a.ext) === ext);
+  if (!agent) {
+    alert('Agente inválido');
+    return;
+  }
+
+  const login = formLogin.value.trim();
+  if (!login) {
+    alert('Ingresa Log in');
+    return;
+  }
+
+  const logout = formLogout.value.trim();
+  const salientes = Number(formSalientes.value || 0);
+  const entrantes = Number(formEntrantes.value || 0);
+  const obs = formObs.value.trim();
+  const fecha = formDate.value || today;
+
+  try {
+    const docId = `${ext}_${fecha}`;
+    const existente = registros.find(r => r.id === docId);
+
+    let archivoDataFinal = existente?.archivoData || "";
+    let archivoNombreFinal = existente?.archivoNombre || "";
+    let archivoTipoFinal = existente?.archivoTipo || "";
+
+    if (archivoFile) {
+      if (archivoFile.size > 700 * 1024) {
+        alert("El archivo es demasiado grande. Usa uno menor a 700 KB.");
         return;
       }
 
-      const login = formLogin.value.trim();
-      if (!login) {
-        alert('Ingresa Log in');
-        return;
-      }
+      const reader = new FileReader();
+      archivoBase64 = await new Promise((resolve) => {
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(archivoFile);
+      });
 
-      const logout = formLogout.value.trim();
-      const salientes = Number(formSalientes.value || 0);
-      const entrantes = Number(formEntrantes.value || 0);
-      const obs = formObs.value.trim();
-      const fecha = formDate.value || today;
+      archivoDataFinal = archivoBase64;
+      archivoNombreFinal = archivoFile.name;
+      archivoTipoFinal = archivoFile.type || "application/octet-stream";
+    }
 
-      try {
-        const docId = `${ext}_${fecha}`;
+    await db.collection('agentes_sabado').doc(docId).set({
+      nombre: agent.nombre,
+      extension: Number(ext),
+      fecha,
+      login,
+      logout,
+      salientes,
+      entrantes,
+      observaciones: obs,
+      archivoData: archivoDataFinal,
+      archivoNombre: archivoNombreFinal,
+      archivoTipo: archivoTipoFinal,
+      tiempoBanio: existente?.tiempoBanio ?? 0,
+      tiempoAlmuerzo: existente?.tiempoAlmuerzo ?? 0,
+      tiempoBanioTexto: existente?.tiempoBanioTexto ?? "0:00",
+      tiempoAlmuerzoTexto: existente?.tiempoAlmuerzoTexto ?? "0:00",
+      timestamp: Date.now()
+    }, { merge: true });
 
-        const existente = registros.find(r => r.id === docId);
-        let pdfFinal = existente?.pdf || "";
-
-        if (pdfFile) {
-          const reader = new FileReader();
-          pdfBase64 = await new Promise((resolve) => {
-            reader.onload = () => resolve(reader.result);
-            reader.readAsDataURL(pdfFile);
-          });
-          pdfFinal = pdfBase64;
-        }
-
-        await db.collection('agentes_sabado').doc(docId).set({
-          nombre: agent.nombre,
-          extension: Number(ext),
-          fecha,
-          login,
-          logout,
-          salientes,
-          entrantes,
-          observaciones: obs,
-          pdf: pdfFinal,
-          tiempoBanio: existente?.tiempoBanio ?? 0,
-          tiempoAlmuerzo: existente?.tiempoAlmuerzo ?? 0,
-          tiempoBanioTexto: existente?.tiempoBanioTexto ?? "0:00",
-          tiempoAlmuerzoTexto: existente?.tiempoAlmuerzoTexto ?? "0:00",
-          timestamp: Date.now()
-        }, { merge: true });
-
-        hideModal();
-await cargarRegistros();
-      } catch (err) {
-        console.error('Guardar', err);
-        alert('Error al guardar. Revise consola.');
-      }
-    });
+      hideModal();
+      await cargarRegistros();
+  } catch (err) {
+    console.error('Guardar', err);
+    alert('Error al guardar. Revise consola.');
+  }
+});
 
     // filters
 searchInput.addEventListener('input', renderGrid);
@@ -1312,25 +1327,86 @@ const horario = agent ? obtenerHorarioAgente(agent, rec.fecha) : "08:00";
 
       doc.save(`reporte_agentes_${from || 'all'}_a_${to || 'all'}.pdf`);
     });
-    function abrirPDF(base64) {
+function abrirArchivo(dataUrl, nombre) {
+  const nuevaVentana = window.open();
 
-      const modal = document.getElementById("pdfModal");
-      const viewer = document.getElementById("pdfViewer");
+  if (!nuevaVentana) {
+    alert("El navegador bloqueó la ventana emergente.");
+    return;
+  }
 
-      viewer.src = base64;
-      modal.style.display = "flex";
+  const mime = (dataUrl.match(/^data:([^;]+);/) || [])[1] || "";
+  const sePuedePrevisualizar =
+    mime === "application/pdf" ||
+    mime.startsWith("image/") ||
+    mime.startsWith("text/");
 
-    }
+  const contenido = sePuedePrevisualizar
+    ? `<iframe src="${dataUrl}"></iframe>`
+    : `
+      <div class="mensaje">
+        <h2>Vista previa no disponible</h2>
+        <p>Este tipo de archivo no se puede mostrar directamente aquí.</p>
+        <p>Usa el botón <strong>Descargar archivo</strong> para abrirlo en tu equipo.</p>
+      </div>
+    `;
 
-    function cerrarPDF() {
+  nuevaVentana.document.write(`
+    <html>
+      <head>
+        <title>${nombre}</title>
+        <style>
+          body{
+            margin:0;
+            background:#0b1224;
+            color:white;
+            font-family:Arial,sans-serif;
+            display:flex;
+            flex-direction:column;
+            height:100vh;
+          }
+          .barra{
+            padding:10px;
+            background:#111827;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+          }
+          .barra a{
+            background:#f59e0b;
+            color:#08101a;
+            text-decoration:none;
+            padding:8px 12px;
+            border-radius:8px;
+            font-weight:bold;
+          }
+          iframe{
+            flex:1;
+            border:none;
+            background:white;
+          }
+          .mensaje{
+            padding:24px;
+            line-height:1.5;
+          }
+          .mensaje h2{
+            margin-top:0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="barra">
+          <div>${nombre}</div>
+          <a href="${dataUrl}" download="${nombre}">Descargar archivo</a>
+        </div>
+        ${contenido}
+      </body>
+    </html>
+  `);
 
-      const modal = document.getElementById("pdfModal");
-      const viewer = document.getElementById("pdfViewer");
-
-      viewer.src = "";
-      modal.style.display = "none";
-
-    }
+  nuevaVentana.document.close();
+}
     // initial render
     cargarRegistros();
   </script>

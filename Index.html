@@ -799,21 +799,26 @@ flex-direction:column;
 
     ];
 
-    function obtenerHorarioAgente(agente) {
+function obtenerHorarioAgente(agente, fecha = null) {
+  let diaSemana;
 
-      const hoy = new Date().getDay();
+  if (fecha) {
+    const partes = fecha.split("-").map(Number);
+    diaSemana = new Date(partes[0], partes[1] - 1, partes[2]).getDay();
+  } else {
+    diaSemana = new Date().getDay();
+  }
 
-      if (agente.days) {
-        return agente.days[hoy];
-      }
+  if (agente.days) {
+    return agente.days[diaSemana];
+  }
 
-      if (hoy === 6) {
-        return agente.sabado;
-      }
+  if (diaSemana === 6) {
+    return agente.sabado;
+  }
 
-      return agente.default;
-
-    }
+  return agente.default;
+}
     // DOM
     const grid = document.getElementById('grid');
     const pdfAgentFilter = document.getElementById('pdfAgentFilter');
@@ -939,7 +944,7 @@ async function cargarRegistros() {
         const obs = rec.observaciones || "";
 
         const agent = agentes.find(a => String(a.ext) === ext);
-        const horario = agent ? obtenerHorarioAgente(agent) : "08:00";
+const horario = agent ? obtenerHorarioAgente(agent, rec.fecha) : "08:00";
         if (selectedAgent !== "all" && ext !== selectedAgent) return;
 
         if (from) {
@@ -1051,8 +1056,36 @@ async function cargarRegistros() {
       });
 
     }
-    function openPanel(ext) { const agent = agentes.find(a => String(a.ext) === String(ext)); const rec = latestData[String(ext)] || {}; panelName.textContent = agent.nombre; panelExt.textContent = 'Ext: ' + agent.ext + (rec.fecha ? ' • ' + rec.fecha : ''); panelTimes.textContent = `${rec.login || '-'} • ${rec.logout || '-'}`; panelSalientes.textContent = rec.salientes ?? 0; panelEntrantes.textContent = rec.entrantes ?? 0; panelObs.textContent = rec.observaciones || 'Sin observación'; panelState.textContent = (() => { if (!rec.login) return 'Sin marcar'; const lm = toMinutes(rec.login); if (lm === null) return 'Hora inválida'; if (lm <= 8 * 60) return 'Puntual'; const r = lm - 8 * 60; return 'Retraso ' + r + ' min'; })(); rightPanel.classList.add('show'); panelEditBtn.onclick = () => showModal(ext); }
+function openPanel(ext) {
+  const agent = agentes.find(a => String(a.ext) === String(ext));
+  const rec = registros.find(r => String(r.extension) === String(ext)) || {};
 
+  panelName.textContent = agent?.nombre || "Agente";
+  panelExt.textContent = 'Ext: ' + (agent?.ext || '-') + (rec.fecha ? ' • ' + rec.fecha : '');
+  panelTimes.textContent = `${rec.login || '-'} • ${rec.logout || '-'}`;
+  panelSalientes.textContent = rec.salientes ?? 0;
+  panelEntrantes.textContent = rec.entrantes ?? 0;
+  panelObs.textContent = rec.observaciones || 'Sin observación';
+
+  panelState.textContent = (() => {
+    if (!rec.login) return 'Sin marcar';
+
+    const lm = toMinutes(rec.login);
+    if (lm === null) return 'Hora inválida';
+
+    const horario = agent ? obtenerHorarioAgente(agent, rec.fecha) : "08:00";
+    const hm = toMinutes(horario);
+
+    if (hm === null) return 'Sin horario';
+    if (lm <= hm) return 'Puntual';
+
+    const r = lm - hm;
+    return 'Retraso ' + r + ' min';
+  })();
+
+  rightPanel.classList.add('show');
+  panelEditBtn.onclick = () => showModal(rec.id);
+}
     // modal
     function showModal(docId) {
       overlayEl.classList.add('show');
@@ -1199,7 +1232,7 @@ pdfDateTo.addEventListener('change', cargarRegistros);
 
       registrosFiltrados.forEach(rec => {
         const agent = agentes.find(a => String(a.ext) === String(rec.extension));
-        const horario = agent ? obtenerHorarioAgente(agent) : "08:00";
+const horario = agent ? obtenerHorarioAgente(agent, rec.fecha) : "08:00";
 
         let estado = 'Sin marcar';
 

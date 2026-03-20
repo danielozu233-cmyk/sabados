@@ -1793,6 +1793,7 @@
               <option value="break">En break</option>
               <option value="disponible">Disponibles</option>
               <option value="ausencia">Ausencia</option>
+              <option value="finalizado">Turno finalizado</option>
             </select>
 
             <select id="filterAgent">
@@ -2180,6 +2181,7 @@
         almuerzo: "En almuerzo",
         break: "En break",
         ausencia: "Ausencia",
+        finalizado: "Turno finalizado",
         excedido: "Excedido",
         sinmarcar: "Sin marcar",
         puntual: "Puntual",
@@ -2815,14 +2817,14 @@
         agPuntualidad.style.color = p.color;
       }
 
-      let statusKey = record.estado || "disponible";
-      const liveBathroom = liveAccumulatedSeconds(record, "baño");
-      const liveLunch = liveAccumulatedSeconds(record, "almuerzo");
-      const liveBreak = liveAccumulatedSeconds(record, "break");
+let statusKey = record.logout ? "finalizado" : (record.estado || "disponible");
+const liveBathroom = liveAccumulatedSeconds(record, "baño");
+const liveLunch = liveAccumulatedSeconds(record, "almuerzo");
+const liveBreak = liveAccumulatedSeconds(record, "break");
 
-      if (record.estado === "baño" && liveBathroom > 15 * 60) statusKey = "excedido";
-      if (record.estado === "almuerzo" && liveLunch > 60 * 60) statusKey = "excedido";
-      if (record.estado === "break" && liveBreak > 15 * 60) statusKey = "excedido";
+if (!record.logout && record.estado === "baño" && liveBathroom > 15 * 60) statusKey = "excedido";
+if (!record.logout && record.estado === "almuerzo" && liveLunch > 60 * 60) statusKey = "excedido";
+if (!record.logout && record.estado === "break" && liveBreak > 15 * 60) statusKey = "excedido";
 
       if (agEstadoBadge) setStatusBadge(agEstadoBadge, statusKey);
 
@@ -2857,8 +2859,11 @@
         if (filter === "leve" && punctuality.key !== "leve") return false;
         if (filter === "retraso" && punctuality.key !== "retraso") return false;
         if (filter === "sinmarcar" && punctuality.key !== "sinmarcar") return false;
-        if (["baño", "almuerzo", "break", "disponible", "ausencia"].includes(filter) && (rec.estado || "disponible") !== filter) return false;
-        return true;
+const visibleState = (rec.fecha !== todayKey() || rec.logout)
+  ? "finalizado"
+  : (rec.estado || "disponible");
+
+if (["baño", "almuerzo", "break", "disponible", "ausencia", "finalizado"].includes(filter) && visibleState !== filter) return false;        return true;
       }).sort((a, b) => {
         if (a.fecha === b.fecha) return String(a.ext).localeCompare(String(b.ext));
         return String(b.fecha).localeCompare(String(a.fecha));

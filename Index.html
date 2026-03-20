@@ -2,128 +2,425 @@
 <html lang="es">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dashboard — Agentes</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operaciones CC</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/10972/10972460.png">
   <style>
     :root {
       --bg: #08101a;
-      --panel: #0e1720;
-      --card: #0f1a24;
-      --card-2: #111827;
-      --accent: #f59e0b;
-      --accent-2: #ffb86b;
+      --panel: #0f1724;
+      --card: #111827;
       --muted: #94a3b8;
-      --glass: rgba(255, 255, 255, 0.04);
+      --text: #e5eef9;
+      --line: rgba(255, 255, 255, 0.08);
+      --accent: #f59e0b;
+      --accent2: #ffb86b;
       --green: #22c55e;
       --red: #ef4444;
-      --yellow: #f59e0b;
-      --text: #e6eef8;
-      --line: rgba(255, 255, 255, 0.06);
+      --blue: #3b82f6;
+      --gray: #64748b;
+      --purple: #8b5cf6;
+      --bg-soft: rgba(255, 255, 255, 0.03);
     }
 
     * {
       box-sizing: border-box;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
 
     html,
     body {
-      height: 100%;
       margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: Inter, Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(circle at top, rgba(245, 158, 11, 0.08), transparent 28%),
-        linear-gradient(180deg, #07111f 0%, #08101a 100%);
+        radial-gradient(circle at top, rgba(245, 158, 11, 0.14), transparent 34%),
+        linear-gradient(180deg, #122033 0%, #16263b 52%, #142235 100%);
       color: var(--text);
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 22px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(8, 16, 26, 0.88);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    h1 {
-      font-size: 20px;
-      margin: 0;
-      font-weight: 900;
-      letter-spacing: 0.3px;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .select,
-    .input,
-    select,
-    textarea {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--line);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 12px;
-      transition: .18s ease;
-    }
-
-    .select:hover,
-    .input:hover,
-    select:hover,
-    textarea:hover {
-      border-color: rgba(245, 158, 11, 0.35);
-    }
-
-    .select:focus,
-    .input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
-    }
-
-    .btn {
-      background: linear-gradient(180deg, var(--accent), var(--accent-2));
-      border: none;
-      color: #08101a;
-      padding: 10px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 800;
-      transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
-      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.22);
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 24px rgba(245, 158, 11, 0.30);
-    }
-
-    .btn.ghost {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--line);
-      color: var(--text);
-      box-shadow: none;
-    }
-
-    .btn.ghost:hover {
-      border-color: rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.05);
     }
 
     .container {
-      max-width: 1280px;
-      margin: 20px auto;
-      padding: 14px;
+      width: min(1320px, 94%);
+      margin: 16px auto 36px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--line);
+      padding: 14px 18px;
+      border-radius: 18px;
+      position: sticky;
+      top: 10px;
+      backdrop-filter: blur(10px);
+      z-index: 30;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .userbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(14, 24, 40, 0.96), rgba(11, 19, 32, 0.96));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+    }
+
+    .title {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 10px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .mini {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .big {
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: .18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      color: #111827;
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.22);
+    }
+
+    .btn-secondary {
+      background: #22334b;
+      color: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #062e12;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: white;
+    }
+
+    .btn-gray {
+      background: var(--gray);
+      color: white;
+    }
+
+    .btn-purple {
+      background: var(--purple);
+      color: white;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      background: #10203a;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline: none;
+      transition: .18s ease;
+    }
+
+    input:hover,
+    textarea:hover,
+    select:hover {
+      border-color: rgba(245, 158, 11, .28);
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, .12);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+      border: 1px solid var(--line);
+    }
+
+    .status.disponible {
+      background: rgba(34, 197, 94, .14);
+      color: #86efac;
+    }
+
+    .status.baño {
+      background: rgba(59, 130, 246, .16);
+      color: #93c5fd;
+    }
+
+    .status.almuerzo {
+      background: rgba(245, 158, 11, .14);
+      color: #fcd34d;
+    }
+
+    .status.break {
+      background: rgba(239, 68, 68, .16);
+      color: #fca5a5;
+    }
+
+    .status.excedido {
+      background: rgba(239, 68, 68, .22);
+      color: #fecaca;
+    }
+
+    .status.sinmarcar {
+      background: rgba(100, 116, 139, .18);
+      color: #cbd5e1;
+    }
+
+    .status.puntual {
+      background: rgba(34, 197, 94, .15);
+      color: #bbf7d0;
+    }
+
+    .status.leve {
+      background: rgba(245, 158, 11, .15);
+      color: #fde68a;
+    }
+
+    .status.retraso {
+      background: rgba(239, 68, 68, .16);
+      color: #fecaca;
+    }
+
+    .status.nolabora {
+      background: rgba(139, 92, 246, .15);
+      color: #ddd6fe;
+    }
+
+    .status.finalizado {
+      background: rgba(148, 163, 184, .16);
+      color: #e2e8f0;
+      justify-content: center;
+      text-align: center;
+      min-width: 120px;
+      line-height: 1.1;
+      padding: 12px 14px;
+    }
+
+    .status.ausencia {
+      background: rgba(100, 116, 139, .20);
+      color: #e2e8f0;
+    }
+
+    .agent-main-card.state-ausencia {
+      border-color: rgba(100, 116, 139, .55);
+      box-shadow: 0 12px 26px rgba(100, 116, 139, .12);
+    }
+
+    .report-card,
+    .report-card * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .warning {
+      background: rgba(59, 130, 246, .10);
+      border: 1px solid rgba(59, 130, 246, .25);
+      color: #bfdbfe;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    .danger {
+      background: rgba(239, 68, 68, .10);
+      border: 1px solid rgba(239, 68, 68, .25);
+      color: #fecaca;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .login-center {
+      min-height: 72vh;
+      display: grid;
+      place-items: center;
+    }
+
+    .login-box {
+      width: min(680px, 94%);
+      text-align: center;
+      padding: 34px 32px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.18);
+    }
+
+    .login-hero {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 14px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      font-size: 36px;
+      background: linear-gradient(180deg, rgba(59, 130, 246, .22), rgba(14, 165, 233, .16));
+      border: 1px solid rgba(255, 255, 255, .16);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 16px 30px rgba(14, 165, 233, .12);
+    }
+
+    .login-copy {
+      max-width: 520px;
+      margin: 0 auto 18px;
+      color: #dbeafe;
+      line-height: 1.5;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(245, 158, 11, .15);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, .25);
+      margin-bottom: 12px;
+    }
+
+    .agent-shell {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      padding: 10px;
+      text-align: center;
     }
 
     .controls {
@@ -143,39 +440,40 @@
       min-width: 220px;
     }
 
-    /* grid */
-    .grid {
+    .admin-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(4, minmax(320px, 1fr));
+      gap: 16px;
+      align-items: start;
     }
 
-    /* card */
-    .card-wrap {
+    .report-card {
       position: relative;
-    }
-
-    .card {
-      position: relative;
-      background: linear-gradient(180deg, rgba(15, 26, 36, 0.98), rgba(17, 24, 39, 0.98));
-      border-radius: 16px;
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 8px 20px rgba(2, 6, 23, 0.45);
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      background: linear-gradient(180deg, rgba(16, 29, 49, 0.98), rgba(12, 22, 37, 0.98));
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: 0 14px 28px rgba(2, 6, 23, .45);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      height: 320px;
-      overflow: hidden;
+      min-height: 390px;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      will-change: transform;
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.52);
-      border-color: rgba(245, 158, 11, 0.18);
+    .report-card:active {
+      transform: none;
     }
 
-    .card::before {
+    @media (hover: hover) and (pointer: fine) {
+      .report-card:hover {
+        box-shadow: 0 18px 40px rgba(0, 0, 0, .46);
+        border-color: rgba(245, 158, 11, 0.18);
+      }
+    }
+
+    .report-card::before {
       content: '';
       position: absolute;
       left: 0;
@@ -188,150 +486,192 @@
 
     .card-header {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 8px;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
     .avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
       background: linear-gradient(135deg, #1f2d3d, #16324a);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
-      font-size: 17px;
+      font-size: 18px;
       color: var(--accent);
-      box-shadow: inset 0 -6px 14px rgba(0, 0, 0, 0.35);
       flex-shrink: 0;
     }
 
-    .agent {
-      font-weight: 800;
-      font-size: 13px;
-      line-height: 1.15;
+    .agent-name {
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.2;
     }
 
-    .ext {
+    .agent-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.3;
+    }
+
+    .state-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+
+    .card-date-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .card-date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: #dbeafe;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .card-info-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .card-info-chip {
+      min-width: 0;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 9px 10px;
+    }
+
+    .card-info-chip .label {
       font-size: 11px;
       color: var(--muted);
-      margin-top: 1px;
+      margin-bottom: 4px;
     }
 
-    .state {
+    .card-info-chip .value {
+      font-size: 15px;
       font-weight: 900;
-      font-size: 13px;
-      letter-spacing: 0.2px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .stats {
+    .mini-badges {
       display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .mini-badge {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .04);
+      color: var(--text);
+    }
+
+    .report-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
       margin-top: 8px;
     }
 
-    .stat {
-      flex: 1;
+    .report-stat {
       background: rgba(255, 255, 255, 0.03);
-      padding: 8px 6px;
-      border-radius: 10px;
+      padding: 9px 8px;
+      border-radius: 12px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.03);
     }
 
-    .stat .label {
+    .report-stat .label {
       font-size: 11px;
       color: var(--muted);
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
-    .stat .value {
-      font-weight: 900;
+    .report-stat .value {
       font-size: 14px;
-      color: var(--text);
+      font-weight: 900;
     }
 
     .note {
-      margin-top: 8px;
-      padding: 8px 10px;
-      border-radius: 10px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 12px;
       background: rgba(255, 255, 255, 0.025);
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.3;
+      line-height: 1.35;
       border: 1px solid rgba(255, 255, 255, 0.03);
     }
 
     .note strong {
       color: var(--text);
-      display: inline-block;
-      margin-bottom: 3px;
-    }
-
-    .note button {
-      margin-top: 6px;
-      width: 100%;
-      padding: 7px 10px;
-      font-size: 12px;
-    }
-
-    .obs-box {
-      min-height: 54px;
-      max-height: 54px;
-      overflow: hidden;
-    }
-
-    .doc-box {
-      min-height: 58px;
-      max-height: 58px;
-      overflow: hidden;
-    }
-
-    .doc-box .btn {
-      width: 100%;
-      margin-top: 6px;
-    }
-
-    .card .note:last-child {
-      margin-top: auto;
-    }
-
-    /* right panel */
-    .panel {
-      position: fixed;
-      right: 18px;
-      top: 84px;
-      width: 380px;
-      max-width: 92%;
-      background: linear-gradient(180deg, #071028, #0b1224);
-      border-radius: 18px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-      display: none;
-      z-index: 1200;
-    }
-
-    .panel.show {
       display: block;
+      margin-bottom: 4px;
     }
 
-    .panel .title {
-      font-weight: 900;
-      font-size: 18px;
-    }
-
-    .panel .row {
+    .report-actions {
       display: flex;
-      justify-content: space-between;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: auto;
+      padding-top: 12px;
+      flex-wrap: wrap;
     }
 
-    /* modal */
+    .report-actions button {
+      flex: 1;
+      min-width: 110px;
+    }
+
+    .access-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .access-item {
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .access-item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(245, 158, 11, .24);
+    }
+
     .overlay {
       position: fixed;
       inset: 0;
@@ -339,8 +679,9 @@
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 1400;
+      z-index: 1500;
       backdrop-filter: blur(4px);
+      padding: 16px;
     }
 
     .overlay.show {
@@ -348,13 +689,14 @@
     }
 
     .modal {
-      width: 720px;
-      max-width: 94%;
+      width: min(860px, 96vw);
+      max-height: 92vh;
+      overflow: auto;
       background: linear-gradient(180deg, #0b1220, #071028);
       padding: 20px;
       border-radius: 18px;
       border: 1px solid var(--line);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
     }
 
     .form-grid {
@@ -363,74 +705,13 @@
       gap: 14px;
     }
 
-    .form-row {
-      display: flex;
-      gap: 12px;
+    .full {
+      grid-column: 1 / -1;
     }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .counter-row {
-      display: flex;
-      gap: 12px;
-    }
-
-    .counter {
-      flex: 1;
-      background: linear-gradient(180deg, #07111a, #091525);
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .counter label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .counter input {
-      width: 100%;
-      text-align: center;
-      padding: 8px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      background: rgba(255, 255, 255, 0.02);
-      color: var(--text);
-    }
-
-    /* pdf */
-    .pdf-controls {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .small-muted {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    select option {
-      background: #0b1224;
-      color: #ffffff;
-    }
-
-    #pdfModal>div {
-      width: 82%;
-      height: 82%;
+    .pdf-modal {
+      width: min(980px, 96vw);
+      height: min(88vh, 800px);
       background: #0b1224;
       border-radius: 16px;
       padding: 12px;
@@ -440,194 +721,1285 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
     }
 
-    #pdfViewer {
+    .pdf-frame {
       flex: 1;
       border: none;
       border-radius: 10px;
       background: white;
     }
 
-    @media (max-width: 800px) {
-      .modal {
-        width: 95%;
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: rgba(11, 18, 32, .96);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 14px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, .36);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: .18s ease;
+      z-index: 1800;
+      max-width: 360px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .agent-main-card {
+      padding: 14px;
+      border-width: 2px;
+      transition: border-color .22s ease, box-shadow .22s ease, background .22s ease;
+    }
+
+    .agent-main-card.state-disponible {
+      border-color: rgba(34, 197, 94, .55);
+      box-shadow: 0 12px 26px rgba(34, 197, 94, .10);
+    }
+
+    .agent-main-card.state-baño {
+      border-color: rgba(59, 130, 246, .7);
+      box-shadow: 0 12px 26px rgba(59, 130, 246, .14);
+      animation: auxPulseBlue 1.05s infinite alternate;
+    }
+
+    .agent-main-card.state-almuerzo {
+      border-color: rgba(245, 158, 11, .7);
+      box-shadow: 0 12px 26px rgba(245, 158, 11, .14);
+      animation: auxPulseYellow 1.05s infinite alternate;
+    }
+
+    .agent-main-card.state-break {
+      border-color: rgba(239, 68, 68, .7);
+      box-shadow: 0 12px 26px rgba(239, 68, 68, .14);
+      animation: auxPulseRed 1.05s infinite alternate;
+    }
+
+    @keyframes auxPulseRed {
+      from {
+        box-shadow: 0 10px 24px rgba(239, 68, 68, .10), 0 0 0 rgba(239, 68, 68, 0);
       }
 
+      to {
+        box-shadow: 0 16px 30px rgba(239, 68, 68, .20), 0 0 16px rgba(239, 68, 68, .18);
+      }
+    }
+
+    @keyframes auxPulseYellow {
+      from {
+        box-shadow: 0 10px 24px rgba(245, 158, 11, .10), 0 0 0 rgba(245, 158, 11, 0);
+      }
+
+      to {
+        box-shadow: 0 16px 30px rgba(245, 158, 11, .20), 0 0 16px rgba(245, 158, 11, .18);
+      }
+    }
+
+    @keyframes auxPulseBlue {
+      from {
+        box-shadow: 0 10px 24px rgba(59, 130, 246, .10), 0 0 0 rgba(59, 130, 246, 0);
+      }
+
+      to {
+        box-shadow: 0 16px 30px rgba(59, 130, 246, .20), 0 0 16px rgba(59, 130, 246, .18);
+      }
+    }
+
+    .agent-main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .agent-panel-block {
+      background:
+        radial-gradient(circle at top right, rgba(59, 130, 246, .08), transparent 36%),
+        linear-gradient(180deg, rgba(12, 22, 38, .96), rgba(9, 16, 28, .98));
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 18px;
+      padding: 14px;
+      min-width: 0;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .04),
+        0 12px 24px rgba(0, 0, 0, .16);
+    }
+
+    .agent-main-card .title {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .agent-info-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .agent-info-item {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .025));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 12px;
+      min-width: 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+    }
+
+    .agent-info-item .label {
+      font-size: 11px;
+      color: #93c5fd;
+      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .agent-info-item .value {
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.2;
+      word-break: break-word;
+      color: #ffffff;
+    }
+
+    .agent-personal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .agent-personal-grid .stat-box {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .02));
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 14px;
+      padding: 10px 8px;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+    }
+
+    .agent-personal-grid .stat-box .mini {
+      font-size: 10px;
+      color: #93c5fd;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .agent-personal-grid .stat-box div:last-child {
+      font-size: 13px !important;
+      font-weight: 900 !important;
+      color: #ffffff;
+      line-height: 1.15;
+    }
+
+    #agTiempoBano,
+    #agTiempoAlmuerzo,
+    #agTiempoBreak,
+    #agLogin,
+    #agEntrantes,
+    #agSalientes {
+      font-size: 16px !important;
+    }
+
+    #agEstadoBadge {
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+    }
+
+    .admin-kpi-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .admin-summary-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .summary-clickable {
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .summary-clickable:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, .26);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, .16);
+    }
+
+    .summary-list-modal {
+      width: min(620px, 96vw);
+    }
+
+    .summary-list-body {
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .summary-list-item-name {
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .summary-list-item-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .summary-list-empty {
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid rgba(255, 255, 255, .08);
+      color: var(--muted);
+      text-align: center;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      .admin-kpi-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .admin-summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .admin-kpi-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .admin-toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .agent-side-stack {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .agent-side-stack .status-block {
+      grid-column: 1 / -1;
+    }
+
+    .agent-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .agent-status-btn {
+      min-height: 46px;
+      padding: 6px;
+      font-size: 24px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+    }
+
+    .agent-status-btn:hover {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    .agent-call-panel {
+      margin-top: 14px;
+      padding: 14px;
+      background:
+        radial-gradient(circle at top right, rgba(59, 130, 246, .10), transparent 34%),
+        linear-gradient(180deg, rgba(17, 31, 53, .96), rgba(10, 20, 34, .98));
+    }
+
+    #agentView .agent-call-panel .title {
+      font-size: 16px;
+    }
+
+    .call-form-row {
+      display: grid;
+      grid-template-columns: 1fr 92px;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .agent-call-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .agent-call-actions #btnRegistrarLlamada {
+      grid-column: 1 / -1;
+      min-height: 42px;
+    }
+
+    .agent-call-actions button {
+      min-height: 38px;
+      white-space: normal;
+      line-height: 1.1;
+      text-align: center;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    .quick-call-btn {
+      background: linear-gradient(180deg, rgba(37, 99, 235, .16), rgba(30, 41, 59, .96));
+      border: 1px solid rgba(96, 165, 250, .16);
+      color: #eff6ff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .quick-call-btn:hover {
+      border-color: rgba(96, 165, 250, .32);
+      background: linear-gradient(180deg, rgba(37, 99, 235, .22), rgba(30, 41, 59, .98));
+    }
+
+    .mood-admin-note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(139, 92, 246, .12), rgba(255, 255, 255, .03));
+      border: 1px solid rgba(139, 92, 246, .18);
+      color: #e9d5ff;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .mood-admin-note strong {
+      color: #f5f3ff;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .top-admin-summary .card {
+      background: linear-gradient(180deg, rgba(15, 27, 46, 0.98), rgba(10, 18, 31, 0.98));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.28);
+    }
+
+    .summary-spotlight {
+      background:
+        radial-gradient(circle at top right, rgba(59, 130, 246, .14), transparent 32%),
+        linear-gradient(135deg, rgba(37, 99, 235, .14), rgba(15, 23, 36, .92));
+      border: 1px solid rgba(96, 165, 250, .22);
+      box-shadow: 0 16px 36px rgba(2, 6, 23, .28);
+    }
+
+    .summary-spotlight .title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .title-row.compact {
+      margin-bottom: 12px;
+    }
+
+    .summary-date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .12);
+      color: #dbeafe;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .summary-highlight-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    /* SOLO ADMIN: resumen general en fila */
+    #topQuickSection .summary-highlight-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    .summary-highlight-box {
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .06));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 10px 24px rgba(0, 0, 0, .12);
+    }
+
+    .summary-highlight-box .summary-label {
+      font-size: 11px;
+      color: #bfdbfe;
+      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .summary-highlight-box .summary-value {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .summary-name-line {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .summary-empty {
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .summary-highlight-box.bath {
+      background: linear-gradient(180deg, rgba(59, 130, 246, .14), rgba(255, 255, 255, .03));
+      border-color: rgba(59, 130, 246, .18);
+    }
+
+    .summary-highlight-box.lunch {
+      background: linear-gradient(180deg, rgba(245, 158, 11, .14), rgba(255, 255, 255, .03));
+      border-color: rgba(245, 158, 11, .18);
+    }
+
+    .summary-highlight-box.break {
+      background: linear-gradient(180deg, rgba(239, 68, 68, .14), rgba(255, 255, 255, .03));
+      border-color: rgba(239, 68, 68, .18);
+    }
+
+    .summary-highlight-box .summary-sub {
+      margin-top: 4px;
+      color: #dbeafe;
+      font-size: 11px;
+      line-height: 1.25;
+      opacity: .95;
+      font-weight: 700;
+    }
+
+    .quick-actions-wrap {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .quick-actions-menu {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 10px);
+      width: min(300px, 82vw);
+      background: linear-gradient(180deg, rgba(14, 24, 40, 0.98), rgba(9, 17, 30, 0.98));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 22px 44px rgba(0, 0, 0, 0.34);
+      display: none;
+      z-index: 100;
+    }
+
+    .quick-actions-menu.show {
+      display: grid;
+      gap: 10px;
+    }
+
+    .quick-actions-menu button {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(14, 24, 40, 0.96), rgba(9, 17, 30, 0.96));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .pagination-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .admin-main {
+      min-width: 0;
+    }
+
+    .admin-toolbar {
+      display: grid;
+      grid-template-columns: minmax(240px, 1.3fr) repeat(4, minmax(120px, .75fr)) auto auto;
+      gap: 10px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .bathroom-alert {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.36);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 70px;
+      z-index: 1900;
+      pointer-events: none;
+    }
+
+    .bathroom-alert-box {
+      width: min(560px, 92vw);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 245, 245, .98), rgba(255, 236, 236, .96));
+      border: 2px solid rgba(239, 68, 68, .45);
+      box-shadow: 0 22px 50px rgba(239, 68, 68, .22);
+      color: #7f1d1d;
+    }
+
+    .bathroom-alert-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      background: rgba(239, 68, 68, .12);
+      flex-shrink: 0;
+    }
+
+    .bathroom-alert-title {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .bathroom-alert-text {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #991b1b;
+    }
+
+    .agent-mood-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at top right, rgba(139, 92, 246, .16), transparent 35%),
+        linear-gradient(180deg, rgba(21, 34, 58, .96), rgba(12, 20, 34, .98));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .05),
+        0 12px 24px rgba(0, 0, 0, .16);
+    }
+
+    .agent-mood-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .agent-mood-title .title {
+      font-size: 16px;
+    }
+
+    .agent-mood-title .muted {
+      color: #c7d2fe;
+      font-size: 12px !important;
+    }
+
+    .agent-mood-buttons {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .mood-btn {
+      min-height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .03));
+      border: 1px solid rgba(255, 255, 255, .10);
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 6px 4px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    .mood-btn span {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .mood-btn small {
+      font-size: 10px;
+      font-weight: 800;
+      color: #dbeafe;
+      line-height: 1.1;
+    }
+
+    .mood-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      border-color: rgba(139, 92, 246, .35);
+      background: linear-gradient(180deg, rgba(139, 92, 246, .18), rgba(255, 255, 255, .04));
+      box-shadow: 0 12px 24px rgba(139, 92, 246, .14);
+    }
+
+    .mood-btn.active {
+      border-color: rgba(250, 204, 21, .48);
+      background:
+        radial-gradient(circle at top, rgba(250, 204, 21, .18), transparent 40%),
+        linear-gradient(180deg, rgba(59, 130, 246, .18), rgba(255, 255, 255, .05));
+      box-shadow:
+        0 0 0 1px rgba(250, 204, 21, .18),
+        0 16px 30px rgba(59, 130, 246, .18);
+    }
+
+    .mood-btn.active small {
+      color: #fff7cc;
+    }
+
+    #agMoodText {
+      background: linear-gradient(180deg, rgba(139, 92, 246, .18), rgba(59, 130, 246, .12));
+      border: 1px solid rgba(255, 255, 255, .12);
+      color: #f5f3ff;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    @media (max-width: 1320px) {
+      .admin-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1100px) {
+
+      .grid-4,
+      .grid-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .agent-main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .agent-personal-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+
+      .grid-4,
+      .grid-3,
+      .grid-2,
+      .stats-grid,
       .form-grid {
         grid-template-columns: 1fr;
       }
 
-      .grid {
+      .topbar {
+        top: 0;
+        border-radius: 0 0 18px 18px;
+      }
+
+      .brand {
+        font-size: 23px;
+      }
+
+      .admin-grid {
         grid-template-columns: 1fr;
       }
 
-      .controls {
-        padding: 12px;
+      .agent-info-list {
+        grid-template-columns: 1fr;
       }
 
-      header {
-        padding: 12px 14px;
+      .agent-personal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      h1 {
-        font-size: 17px;
+      .agent-actions-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .agent-mood-buttons {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .mood-btn {
+        min-height: 70px;
+      }
+
+      .mood-btn span {
+        font-size: 22px;
+      }
+
+      .call-form-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
+
 </head>
 
 <body>
-  <header>
-    <div style="display:flex;gap:12px;align-items:center">
-      <h1>Agentes — Dashboard</h1>
-    </div>
-    <div class="header-right">
-      <div class="pdf-controls">
-        <select id="pdfAgentFilter" class="select">
-          <option value="all">Todos</option>
-        </select>
-        <input id="pdfDateFrom" type="date" class="input" />
-        <input id="pdfDateTo" type="date" class="input" />
-        <button id="downloadPdfBtn" class="btn">Descargar PDF</button>
+  <div class="container">
+    <section id="loginView" class="login-center">
+      <div class="card login-box">
+        <div class="login-hero">🎧</div>
+        <div class="badge">Panel de operaciones</div>
+        <h1 style="margin:0 0 10px;">Operaciones Call Center</h1>
+        <p class="login-copy">
+          Inicia sesión con tu Correo Institucional para acceder a tu panel.
+        </p>
+        <button id="btnLogin" class="btn-primary">Iniciar sesión con Microsoft</button>
       </div>
-    </div>
-  </header>
-  <main class="container">
-    <div class="controls">
-      <input id="searchInput" class="input search" placeholder="Buscar por nombre o extensión..." />
-      <select id="filterSelect" class="select">
-        <option value="all">Todos</option>
-        <option value="puntual">Puntuales</option>
-        <option value="leve">Leves (≤5 min)</option>
-        <option value="retraso">Retraso (&gt;5 min)</option>
-        <option value="sinmarcar">Sin marcar</option>
-      </select>
-      <label class="small-muted">Compact</label>
-      <input type="checkbox" id="compactCheckbox" />
-      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-        <div class="small-muted">Shift+R para registrar/editar</div>
-        <button id="floatingBtn" class="btn">Registrar</button>
-      </div>
-    </div>
+    </section>
 
-    <div id="grid" class="grid" aria-live="polite"></div>
-  </main>
-  <div id="rightPanel" class="panel" aria-hidden="true">
-    <div class="title" id="panelName">Agente</div>
-    <div class="row">
-      <div class="small-muted" id="panelExt">Ext: -</div>
-      <div id="panelState" class="state">Estado</div>
-    </div>
-    <div class="row">
-      <div class="small-muted" id="panelTimes">- • -</div>
-      <div></div>
-    </div>
-    <div style="margin-top:12px">
-      <div class="small-muted">Salientes: <strong id="panelSalientes">0</strong></div>
-      <div class="small-muted">Entrantes: <strong id="panelEntrantes">0</strong></div>
-    </div>
-    <div style="margin-top:12px">
-      <div class="small-muted" style="font-weight:700">Observaciones</div>
-      <div id="panelObs" style="margin-top:6px;color:var(--accent-2);line-height:1.2">Sin observación</div>
-    </div>
-    <div style="display:flex;justify-content:flex-end;margin-top:12px"><button id="panelEditBtn" class="btn">Editar
-        (Shift+R)</button></div>
+    <section id="appView" class="hidden">
+      <div class="topbar">
+        <div>
+          <div class="brand">Panel de Auxiliares</div>
+          <div class="sub">Tiempos</div>
+        </div>
+
+        <div class="userbox">
+          <div id="userInfo" class="pill">Sin sesión</div>
+          <div id="roleInfo" class="pill">Rol: -</div>
+          <button id="btnLogout" class="btn-secondary">Cerrar sesión</button>
+        </div>
+      </div>
+
+      <div id="topSummary" class="grid top-admin-summary admin-kpi-grid" style="margin-bottom:16px;">
+        <div class="card">
+          <div class="mini">Registros de hoy</div>
+          <div class="big" id="kpiTotal">0</div>
+        </div>
+        <div class="card">
+          <div class="mini">En baño</div>
+          <div class="big" id="kpiBano">0</div>
+        </div>
+        <div class="card">
+          <div class="mini">En almuerzo</div>
+          <div class="big" id="kpiAlmuerzo">0</div>
+        </div>
+        <div class="card">
+          <div class="mini">En break</div>
+          <div class="big" id="kpiBreak">0</div>
+        </div>
+        <div class="card">
+          <div class="mini">Disponibles</div>
+          <div class="big" id="kpiDisponibles">0</div>
+        </div>
+      </div>
+
+      <div id="topQuickSection" class="top-admin-summary" style="margin-bottom:16px;">
+        <div class="card summary-spotlight">
+          <div class="title-row">
+            <div>
+              <h2 class="title" style="margin-bottom:6px;">Resumen general de hoy</h2>
+              <div class="muted">Vista rápida del piso en tiempo real</div>
+            </div>
+            <div id="infoTodayDate" class="summary-date-pill">Fecha operativa: -</div>
+          </div>
+
+          <div class="summary-highlight-grid admin-summary-grid">
+            <div id="summaryCardBano" class="summary-highlight-box bath summary-clickable" data-summary-type="baño">
+              <div class="summary-label">🚻 Agentes en baño</div>
+              <div id="listaBano" class="summary-value">Nadie</div>
+              <div id="listaBanoMeta" class="summary-sub">0 agentes</div>
+            </div>
+
+            <div id="summaryCardAlmuerzo" class="summary-highlight-box lunch summary-clickable"
+              data-summary-type="almuerzo">
+              <div class="summary-label">🍔 Agentes en almuerzo</div>
+              <div id="listaAlmuerzo" class="summary-value">Nadie</div>
+              <div id="listaAlmuerzoMeta" class="summary-sub">0 agentes</div>
+            </div>
+
+            <div id="summaryCardBreak" class="summary-highlight-box break summary-clickable" data-summary-type="break">
+              <div class="summary-label">⏸️ Agentes en break</div>
+              <div id="listaBreak" class="summary-value">Nadie</div>
+              <div id="listaBreakMeta" class="summary-sub">0 agentes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section id="noAccessView" class="hidden" style="margin-top:16px;">
+        <div class="card">
+          <h2 class="title">Sin acceso configurado</h2>
+          <div class="danger">
+            Tu cuenta inició sesión correctamente, pero no existe en
+            <strong>prueba_operaciones_usuarios</strong>.
+            Pídele a un admin que te registre con tu correo institucional y te asigne una extensión.
+          </div>
+        </div>
+      </section>
+
+      <section id="agentView" class="hidden agent-view-compact" style="margin-top:16px;">
+        <div class="card agent-main-card">
+          <div class="agent-main-grid">
+            <div class="agent-panel-block">
+              <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+                <div>
+                  <h2 class="title" style="margin-bottom:6px;">Mi panel</h2>
+                  <div class="muted">Tu vista personal de operaciones del día</div>
+                </div>
+                <div id="agEstadoBadge" class="status disponible">Disponible</div>
+              </div>
+
+              <div class="agent-info-list">
+                <div class="agent-info-item">
+                  <div class="label">Nombre</div>
+                  <div id="agNombre" class="value">-</div>
+                </div>
+                <div class="agent-info-item">
+                  <div class="label">Correo</div>
+                  <div id="agCorreo" class="value" style="font-size:14px;word-break:break-word;">-
+                  </div>
+                </div>
+                <div class="agent-info-item">
+                  <div class="label">Extensión</div>
+                  <div id="agExt" class="value">-</div>
+                </div>
+                <div class="agent-info-item">
+                  <div class="label">Horario asignado</div>
+                  <div id="agHorario" class="value">-</div>
+                </div>
+              </div>
+
+              <div class="agent-personal-grid" style="margin-top:12px;">
+                <div class="stat-box">
+                  <div class="mini">Puntualidad</div>
+                  <div id="agPuntualidad" style="font-size:16px;font-weight:900;">-</div>
+                </div>
+                <div class="stat-box">
+                  <div class="mini">Fecha</div>
+                  <div id="agFecha" style="font-size:16px;font-weight:900;">-</div>
+                </div>
+                <div class="stat-box">
+                  <div class="mini">Baño</div>
+                  <div id="agTiempoBano" style="font-size:20px;font-weight:900;">00:00:00</div>
+                </div>
+                <div class="stat-box">
+                  <div class="mini">Almuerzo</div>
+                  <div id="agTiempoAlmuerzo" style="font-size:20px;font-weight:900;">00:00:00</div>
+                </div>
+                <div class="stat-box">
+                  <div class="mini">Break</div>
+                  <div id="agTiempoBreak" style="font-size:20px;font-weight:900;">00:00:00</div>
+                </div>
+                <div class="stat-box">
+                  <div class="mini">Entrantes</div>
+                  <div id="agEntrantes" style="font-size:20px;font-weight:900;">0</div>
+                </div>
+                <div class="stat-box">
+                  <div class="mini">Salientes</div>
+                  <div id="agSalientes" style="font-size:20px;font-weight:900;">0</div>
+                </div>
+                <div class="stat-box">
+                  <div class="mini">Log In</div>
+                  <div id="agLogin" style="font-size:20px;font-weight:900;">-</div>
+                </div>
+              </div>
+
+              <div class="agent-mood-box">
+                <div class="agent-mood-title">
+                  <div>
+                    <div class="title" style="margin:0 0 4px;">¿Cómo te sientes hoy?</div>
+                    <div class="muted" style="font-size:13px;">Selecciona un emoji para tu encuesta
+                      diaria</div>
+                  </div>
+                  <div id="agMoodText" class="mini-badge">Sin elegir</div>
+                </div>
+                <div class="agent-mood-buttons">
+                  <button type="button" class="mood-btn" data-mood="excelente"
+                    data-emoji="😄"><span>😄</span><small>Excelente</small></button>
+
+                  <button type="button" class="mood-btn" data-mood="bien"
+                    data-emoji="🙂"><span>🙂</span><small>Bien</small></button>
+
+                  <button type="button" class="mood-btn" data-mood="normal"
+                    data-emoji="😐"><span>😐</span><small>Normal</small></button>
+
+                  <button type="button" class="mood-btn" data-mood="cansado"
+                    data-emoji="😴"><span>😴</span><small>Cansado</small></button>
+
+                  <button type="button" class="mood-btn" data-mood="estresado"
+                    data-emoji="😣"><span>😣</span><small>Estresado</small></button>
+
+                  <button type="button" class="mood-btn" data-mood="enojado"
+                    data-emoji="😡"><span>😡</span><small>Enojado</small></button>
+
+                  <button type="button" class="mood-btn" data-mood="payaso"
+                    data-emoji="🤡"><span>🤡</span><small>Payaso</small></button>
+                </div>
+              </div>
+              <div class="agent-panel-block agent-call-panel">
+                <div class="title-row compact">
+                  <div>
+                    <h1 class="title" style="margin-bottom:6px;">Registrar llamadas</h1>
+                  </div>
+                </div>
+
+                <div class="call-form-row">
+                  <div class="field" style="margin-bottom:0;">
+                    <label>Tipo de llamada</label>
+                    <select id="agentCallType">
+                      <option value="Entrante">Entrante</option>
+                      <option value="Saliente">Saliente</option>
+                    </select>
+                  </div>
+                  <div class="field" style="margin-bottom:0;">
+                    <label>Cantidad</label>
+                    <input id="agentCallQty" type="number" min="1" value="1" />
+                  </div>
+                </div>
+
+                <div class="agent-call-actions">
+                  <button id="btnRegistrarLlamada" class="btn-blue">Registrar cantidad</button>
+                  <button id="btnQuickEntrante" class="btn-secondary quick-call-btn">📞 +1
+                    Entrante</button>
+                  <button id="btnQuickSaliente" class="btn-secondary quick-call-btn">📞 +1
+                    Saliente</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="agent-side-stack">
+              <div class="agent-panel-block status-block">
+                <h2 class="title">Cambiar estado</h2>
+                <div class="agent-actions-grid">
+                  <button id="btnDisponible" class="btn-green agent-status-btn" title="Disponible"
+                    aria-label="Disponible">✅</button>
+                  <button id="btnBano" class="btn-blue agent-status-btn" title="Baño" aria-label="Baño">🚻</button>
+                  <button id="btnAlmuerzo" class="btn-primary agent-status-btn" title="Almuerzo"
+                    aria-label="Almuerzo">🍔</button>
+                  <button id="btnBreak" class="btn-red agent-status-btn" title="Break" aria-label="Break">⏸️</button>
+                </div>
+                <div class="warning" style="margin-top:12px;">
+                  Máximo <strong>2 agentes</strong> en baño al mismo tiempo.
+                </div>
+              </div>
+
+
+
+              <div class="agent-panel-block summary-spotlight">
+                <div class="title-row">
+                  <div>
+                    <h2 class="title" style="margin-bottom:6px;">Resumen general</h2>
+                    <div class="muted">Movimiento del equipo</div>
+                  </div>
+                </div>
+                <div class="summary-highlight-grid">
+                  <div id="summaryCardBanoAgent" class="summary-highlight-box bath summary-clickable"
+                    data-summary-type="baño">
+                    <div class="summary-label">🚻 Agentes en baño</div>
+                    <div id="listaBanoAgent" class="summary-value">Nadie</div>
+                    <div id="listaBanoAgentMeta" class="summary-sub">0 agentes</div>
+                  </div>
+
+                  <div id="summaryCardAlmuerzoAgent" class="summary-highlight-box lunch summary-clickable"
+                    data-summary-type="almuerzo">
+                    <div class="summary-label">🍔 Agentes en almuerzo</div>
+                    <div id="listaAlmuerzoAgent" class="summary-value">Nadie</div>
+                    <div id="listaAlmuerzoAgentMeta" class="summary-sub">0 agentes</div>
+                  </div>
+
+                  <div id="summaryCardBreakAgent" class="summary-highlight-box break summary-clickable"
+                    data-summary-type="break">
+                    <div class="summary-label">⏸️ Agentes en break</div>
+                    <div id="listaBreakAgent" class="summary-value">Nadie</div>
+                    <div id="listaBreakAgentMeta" class="summary-sub">0 agentes</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="adminView" class="hidden" style="margin-top:16px;">
+        <div class="admin-main">
+          <div class="admin-toolbar">
+            <input id="searchInput" class="search" placeholder="Buscar por nombre, correo o extensión..." />
+            <select id="filterStatus">
+              <option value="all">Todos</option>
+              <option value="puntual">Puntuales</option>
+              <option value="leve">Leves (≤5 min)</option>
+              <option value="retraso">Retraso (&gt;5 min)</option>
+              <option value="sinmarcar">Sin marcar</option>
+              <option value="baño">En baño</option>
+              <option value="almuerzo">En almuerzo</option>
+              <option value="break">En break</option>
+              <option value="disponible">Disponibles</option>
+              <option value="ausencia">Ausencia</option>
+            </select>
+
+            <select id="filterAgent">
+              <option value="all">Todos los agentes</option>
+            </select>
+
+            <input id="filterFrom" type="date" />
+            <input id="filterTo" type="date" />
+
+            <div class="quick-actions-wrap">
+              <button id="btnQuickActionsToggle" class="btn-primary hidden">Acciones rápidas</button>
+              <div id="quickActionsMenu" class="quick-actions-menu">
+                <button id="btnGenerateToday" class="btn-blue">Generar registros de hoy</button>
+                <button id="btnReloadAdmin" class="btn-secondary">Recargar</button>
+                <button id="btnDownloadPdf" class="btn-primary">Descargar PDF</button>
+                <button id="btnOpenAccessModal" class="btn-purple">Gestionar accesos</button>
+                <button id="btnResetToday" class="btn-red">Reiniciar día actual</button>
+              </div>
+            </div>
+
+            <button id="btnOpenRecordModal" class="btn-secondary">Registrar / editar</button>
+          </div>
+
+          <div id="adminCards" class="admin-grid"></div>
+        </div>
+      </section>
+    </section>
   </div>
-  <div id="overlay" class="overlay">
-    <div class="modal" role="dialog" aria-modal="true">
-      <h3 style="margin:0 0 8px 0">Registrar / Editar agente</h3>
+
+  <div id="accessModalOverlay" class="overlay">
+    <div class="modal">
+      <div
+        style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+        <div>
+          <h3 style="margin:0 0 4px 0;">Gestión de accesos</h3>
+          <div class="muted">Asigna el correo institucional a cada agente o supervisor.</div>
+        </div>
+        <button id="btnCloseAccessModal" class="btn-secondary">Cerrar</button>
+      </div>
       <div class="form-grid">
-        <div class="form-group">
-          <label class="small-muted">Agente</label>
-          <select id="formAgent" class="input"></select>
+        <div class="field">
+          <label>Agente / extensión</label>
+          <select id="accessRosterSelect"></select>
         </div>
+        <div class="field">
+          <label>Correo institucional</label>
+          <input id="accessEmail" type="email" placeholder="nombre@upana.edu.gt" />
+        </div>
+        <div class="field">
+          <label>Rol</label>
+          <select id="accessRole">
+            <option value="agent">Agente</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Estado</label>
+          <select id="accessActive">
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions" style="margin-top:6px;">
+        <button id="btnSaveAccess" class="btn-blue">Guardar acceso</button>
+        <button id="btnClearAccess" class="btn-secondary">Limpiar</button>
+      </div>
+      <div class="access-list" id="accessList"></div>
+    </div>
+  </div>
 
-        <div class="form-group">
-          <label class="small-muted">Extensión</label>
-          <input id="formExt" class="input" readonly />
+  <div id="recordModalOverlay" class="overlay">
+    <div class="modal">
+      <h3 style="margin:0 0 10px 0;">Registrar / editar agente</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>Usuario</label>
+          <select id="recordUserSelect"></select>
         </div>
-        <div class="form-group">
-          <label class="small-muted">Fecha</label>
-          <input id="formDate" type="date" class="input" />
+        <div class="field">
+          <label>Extensión</label>
+          <input id="recordExt" readonly />
         </div>
-        <div class="form-group">
-          <label class="small-muted">Observaciones</label>
-          <textarea id="formObs" class="input"></textarea>
+        <div class="field">
+          <label>Fecha</label>
+          <input id="recordDate" type="date" />
         </div>
-        <div class="form-group">
-<label class="small-muted">Archivo adjunto</label>
-<input type="file" id="formArchivo" class="input">
-<div class="small-muted">Máximo recomendado: 700 KB</div>
+        <div class="field">
+          <label>Estado actual</label>
+          <select id="recordState">
+            <option value="disponible">Disponible</option>
+            <option value="baño">Baño</option>
+            <option value="almuerzo">Almuerzo</option>
+            <option value="break">Break</option>
+            <option value="ausencia">Ausencia</option>
+          </select>
         </div>
-        <div style="grid-column:1/3">
-          <div class="form-row">
-            <div style="flex:1">
-              <label class="small-muted">Log in</label>
-              <input id="formLogin" type="time" class="input" />
-            </div>
-            <div style="flex:1">
-              <label class="small-muted">Log out</label>
-              <input id="formLogout" type="time" class="input" />
-            </div>
+        <div class="field">
+          <label>Log in</label>
+          <input id="recordLogin" type="time" />
+        </div>
+        <div class="field">
+          <label>Log out</label>
+          <input id="recordLogout" type="time" />
+        </div>
+        <div class="field">
+          <label>Entrantes</label>
+          <input id="recordEntrantes" type="number" min="0" />
+        </div>
+        <div class="field">
+          <label>Salientes</label>
+          <input id="recordSalientes" type="number" min="0" />
+        </div>
+        <div class="field">
+          <label>Tiempo baño (segundos)</label>
+          <input id="recordSegBano" type="number" min="0" />
+        </div>
+        <div class="field">
+          <label>Tiempo almuerzo (segundos)</label>
+          <input id="recordSegAlmuerzo" type="number" min="0" />
+        </div>
+        <div class="field full">
+          <label>Observaciones</label>
+          <textarea id="recordObs"></textarea>
+        </div>
+        <div class="field full">
+          <label>PDF de observaciones (opcional)</label>
+          <input id="recordPdf" type="file" accept="application/pdf" />
+          <div class="row">
+            <label style="display:flex;gap:8px;align-items:center; cursor:pointer;">
+              <input id="recordRemovePdf" type="checkbox" style="width:auto;" />
+              <span class="mini">Eliminar PDF actual</span>
+            </label>
+            <div id="recordPdfInfo" class="mini"></div>
           </div>
         </div>
-        <div style="grid-column:1/3">
-          <div class="counter-row">
-            <div class="counter">
-              <label>Salientes</label>
-              <input id="formSalientes" type="number" min="0" />
-            </div>
-            <div class="counter">
-              <label>Entrantes</label>
-              <input id="formEntrantes" type="number" min="0" />
-            </div>
-          </div>
-        </div>
-        <div style="grid-column:1/3;display:flex;justify-content:flex-end;gap:8px;margin-top:6px">
-          <button id="saveBtn" class="btn">Guardar</button>
-          <button id="closeBtn" class="btn ghost">Cerrar</button>
-        </div>
+      </div>
+      <div class="actions" style="justify-content:flex-end; margin-top:8px;">
+        <button id="btnSaveRecord" class="btn-primary">Guardar</button>
+        <button id="btnCloseRecordModal" class="btn-secondary">Cerrar</button>
       </div>
     </div>
   </div>
-  <div id="pdfModal" style="
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
-z-index:2000;
-align-items:center;
-justify-content:center;
-">
 
-    <div style="
-width:80%;
-height:80%;
-background:#0b1224;
-border-radius:10px;
-padding:10px;
-display:flex;
-flex-direction:column;
-">
-
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-        <strong>Observaciones (PDF)</strong>
-        <button onclick="cerrarPDF()" class="btn ghost">Cerrar</button>
+  <div id="pdfModalOverlay" class="overlay">
+    <div class="pdf-modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong>Observaciones PDF</strong>
+        <button id="btnClosePdf" class="btn-secondary">Cerrar</button>
       </div>
-
-      <iframe id="pdfViewer" style="flex:1;border:none;"></iframe>
-
+      <iframe id="pdfViewer" class="pdf-frame"></iframe>
     </div>
   </div>
-  <!-- libs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <div id="bathroomAlert" class="bathroom-alert hidden">
+    <div class="bathroom-alert-box">
+      <div class="bathroom-alert-icon">⚠️</div>
+      <div>
+        <div class="bathroom-alert-title">Baño temporalmente no disponible</div>
+        <div id="bathroomAlertText" class="bathroom-alert-text">Espere a que otro agente regrese del baño.</div>
+      </div>
+    </div>
+  </div>
+  <div id="summaryListOverlay" class="overlay">
+    <div class="modal summary-list-modal">
+      <div
+        style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+        <div>
+          <h3 id="summaryListTitle" style="margin:0 0 4px 0;">Detalle</h3>
+          <div class="muted">Listado completo de agentes</div>
+        </div>
+        <button id="btnCloseSummaryList" class="btn-secondary">Cerrar</button>
+      </div>
+      <div id="summaryListBody" class="summary-list-body"></div>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      OAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      setDoc,
+      getDoc,
+      getDocs,
+      updateDoc,
+      addDoc,
+      onSnapshot,
+      query,
+      where,
+      serverTimestamp,
+      increment,
+      writeBatch
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyCKRB49LOhaR79NI8CwypqCMf_10GHd77k",
       authDomain: "reports-e956a.firebaseapp.com",
@@ -637,778 +2009,1430 @@ flex-direction:column;
       appId: "1:1058914487818:web:ef0e53d4a400cb85a199f3",
       measurementId: "G-XB6QQR984G"
     };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
 
-    const agentes = [
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new OAuthProvider("microsoft.com");
+    provider.setCustomParameters({
+      tenant: "b13b704f-c405-40bf-bdd1-2f2e151a21b0"
+    });
 
-      {
-        nombre: "Sarahi Churumia", ext: 8001,
-        days: {
-          1: "09:00",
-          2: "09:00",
-          3: "09:00",
-          4: "10:00",
-          5: "10:00",
-          6: "07:00"
-        }
+    const USERS_COLLECTION = "prueba_operaciones_usuarios";
+    const RECORDS_COLLECTION = "prueba_operaciones_registros";
+    const CALLS_COLLECTION = "prueba_operaciones_llamadas";
+    const MAX_BANO = 2;
+
+    const ADMIN_PROFILES = {
+      "stnozuna@upana.edu.gt": {
+        nombre: "Daniel Galvez",
+        ext: "ADMIN"
       },
+      "mmarevalo@upana.edu.gt": {
+        nombre: "Mayra Arevalo",
+        ext: "ADMIN"
+      },
+      "jmjuarez@upana.edu.gt": {
+        nombre: "Joselyn Juares",
+        ext: "ADMIN"
+      }
+    };
 
+    const ADMIN_EMAILS = Object.keys(ADMIN_PROFILES);
+
+    const AGENT_ROSTER = [
+      { nombre: "Sarahi Churumia", ext: 8001, days: { 1: "09:00", 2: "09:00", 3: "09:00", 4: "10:00", 5: "10:00", 6: "07:00" } },
       { nombre: "Justa Jaes", ext: 8002, default: "09:00", sabado: "09:00" },
-
       { nombre: "Javier Alvarez", ext: 8003, default: "08:00", sabado: "07:00" },
-
       { nombre: "Merlin Bajan", ext: 8004, default: "08:00", sabado: null },
-
-      { nombre: "Mónica Ordónez", ext: 8005, default: "09:00", sabado: "09:00" },
-
-      {
-        nombre: "Alejandro Vásquez", ext: 8006,
-        days: {
-          1: "09:00",
-          2: "09:00",
-          3: "08:00",
-          4: "08:00",
-          5: "08:00",
-          6: "07:00"
-        }
-      },
-
+      { nombre: "Mónica Ordóñez", ext: 8005, default: "09:00", sabado: "09:00" },
+      { nombre: "Alejandro Vásquez", ext: 8006, days: { 1: "09:00", 2: "09:00", 3: "08:00", 4: "08:00", 5: "08:00", 6: "07:00" } },
       { nombre: "Joselyne Velásquez", ext: 8007, default: "09:00", sabado: "09:00" },
-
-      {
-        nombre: "Jackeline Castillo", ext: 8008,
-        days: {
-          1: "10:00",
-          2: "10:00",
-          3: "09:00",
-          4: "09:00",
-          5: "09:00",
-          6: "07:00"
-        }
-      },
-
+      { nombre: "Jackeline Castillo", ext: 8008, days: { 1: "10:00", 2: "10:00", 3: "09:00", 4: "09:00", 5: "09:00", 6: "07:00" } },
       { nombre: "Mildred Cordero", ext: 8009, default: "08:00", sabado: "09:00" },
-
-      {
-        nombre: "Tania de León", ext: 8010,
-        days: {
-          1: "09:00",
-          2: "09:00",
-          3: "09:00",
-          4: "10:00",
-          5: "10:00",
-          6: "07:00"
-        }
-      },
-
+      { nombre: "Tania de León", ext: 8010, days: { 1: "09:00", 2: "09:00", 3: "09:00", 4: "10:00", 5: "10:00", 6: "07:00" } },
       { nombre: "Anthony García", ext: 8011, default: "09:00", sabado: "09:00" },
-
       { nombre: "Jorge Veliz", ext: 8013, default: "09:00", sabado: "09:00" },
-
       { nombre: "Daniel Coyoy", ext: 8014, default: "08:00", sabado: null },
-
-      {
-        nombre: "Néstor Galvez", ext: 8015,
-        days: {
-          1: "10:00",
-          2: "10:00",
-          3: "09:00",
-          4: "09:00",
-          5: "09:00",
-          6: "07:00"
-        }
-      },
-
+      { nombre: "Nestor Galvez", ext: 8015, days: { 1: "10:00", 2: "10:00", 3: "09:00", 4: "09:00", 5: "09:00", 6: "07:00" } },
       { nombre: "Andrea Jiménez", ext: 8016, default: "09:00", sabado: "09:00" },
-
       { nombre: "Diego Chiché", ext: 8017, default: "09:00", sabado: "09:00" },
-
       { nombre: "Ashley López", ext: 8018, default: "08:00", sabado: "07:00" },
-
       { nombre: "Synndy Sanchez", ext: 8020, default: "09:00", sabado: "09:00" },
-
-      {
-        nombre: "Mishell de León", ext: 8021,
-        days: {
-          1: "10:00",
-          2: "10:00",
-          3: "09:00",
-          4: "09:00",
-          5: "09:00",
-          6: "07:00"
-        }
-      },
-
+      { nombre: "Mishell de León", ext: 8021, days: { 1: "10:00", 2: "10:00", 3: "09:00", 4: "09:00", 5: "09:00", 6: "07:00" } },
       { nombre: "Omar Ramirez", ext: 8022, default: "09:00", sabado: "08:00" },
-
       { nombre: "Madelin Ovando", ext: 8023, default: "09:00", sabado: "09:00" },
-
-      {
-        nombre: "Evelyn de León", ext: 8024,
-        days: {
-          1: "10:00",
-          2: "10:00",
-          3: "09:00",
-          4: "09:00",
-          5: "09:00",
-          6: "07:00"
-        }
-      },
-
+      { nombre: "Evelyn de León", ext: 8024, days: { 1: "10:00", 2: "10:00", 3: "09:00", 4: "09:00", 5: "09:00", 6: "07:00" } },
       { nombre: "Andres Marín", ext: 8025, default: "08:00", sabado: null },
-
       { nombre: "Bryan Hernandez", ext: 8026, default: "09:00", sabado: "09:00" },
-
-      {
-        nombre: "Rafael Sánchez", ext: 8027,
-        days: {
-          1: "09:00",
-          2: "09:00",
-          3: "09:00",
-          4: "10:00",
-          5: "10:00",
-          6: "07:00"
-        }
-      },
-
-      {
-        nombre: "Marta Morales", ext: 8028,
-        days: {
-          1: "10:00",
-          2: "10:00",
-          3: "09:00",
-          4: "09:00",
-          5: "09:00",
-          6: "07:00"
-        }
-      },
-
-      {
-        nombre: "Pablo Ibañez", ext: 8029,
-        days: {
-          1: "08:00",
-          2: "08:00",
-          3: "08:00",
-          4: "09:00",
-          5: "09:00",
-          6: "07:00"
-        }
-      },
-
+      { nombre: "Rafael Sánchez", ext: 8027, days: { 1: "09:00", 2: "09:00", 3: "09:00", 4: "10:00", 5: "10:00", 6: "07:00" } },
+      { nombre: "Marta Morales", ext: 8028, days: { 1: "10:00", 2: "10:00", 3: "09:00", 4: "09:00", 5: "09:00", 6: "07:00" } },
+      { nombre: "Pablo Ibañez", ext: 8029, days: { 1: "08:00", 2: "08:00", 3: "08:00", 4: "09:00", 5: "09:00", 6: "07:00" } },
       { nombre: "María Perdomo", ext: 8030, default: "09:00", sabado: "09:00" }
-
     ];
 
-function obtenerHorarioAgente(agente, fecha = null) {
-  let diaSemana;
+    const $ = (id) => document.getElementById(id);
 
-  if (fecha) {
-    const partes = fecha.split("-").map(Number);
-    diaSemana = new Date(partes[0], partes[1] - 1, partes[2]).getDay();
-  } else {
-    diaSemana = new Date().getDay();
-  }
+    let currentUser = null;
+    let currentProfile = null;
+    let todaySummaryRecords = [];
+    let adminRangeRecords = [];
+    let accessUsers = [];
 
-  if (agente.days) {
-    return agente.days[diaSemana];
-  }
+    let unsubTodaySummary = null;
+    let unsubAdminRange = null;
+    let unsubUsers = null;
+    let liveTimer = null;
+    let dayWatcherTimer = null;
+    let activeOperationalDay = todayKey();
 
-  if (diaSemana === 6) {
-    return agente.sabado;
-  }
+    const toastEl = $("toast");
 
-  return agente.default;
-}
-    // DOM
-    const grid = document.getElementById('grid');
-    const pdfAgentFilter = document.getElementById('pdfAgentFilter');
-    const pdfDateFrom = document.getElementById('pdfDateFrom');
-    const pdfDateTo = document.getElementById('pdfDateTo');
-    const searchInput = document.getElementById('searchInput');
-    const filterSelect = document.getElementById('filterSelect');
-    const compactCheckbox = document.getElementById('compactCheckbox');
-    const floatingBtn = document.getElementById('floatingBtn');
-
-    const overlayEl = document.getElementById('overlay');
-    const formAgent = document.getElementById('formAgent');
-    const formExt = document.getElementById('formExt');
-    const formDate = document.getElementById('formDate');
-    const formLogin = document.getElementById('formLogin');
-    const formLogout = document.getElementById('formLogout');
-    const formSalientes = document.getElementById('formSalientes');
-    const formEntrantes = document.getElementById('formEntrantes');
-    const formObs = document.getElementById('formObs');
-    const saveBtn = document.getElementById('saveBtn');
-    const closeBtn = document.getElementById('closeBtn');
-
-    const rightPanel = document.getElementById('rightPanel');
-    const panelName = document.getElementById('panelName');
-    const panelExt = document.getElementById('panelExt');
-    const panelState = document.getElementById('panelState');
-    const panelTimes = document.getElementById('panelTimes');
-    const panelSalientes = document.getElementById('panelSalientes');
-    const panelEntrantes = document.getElementById('panelEntrantes');
-    const panelObs = document.getElementById('panelObs');
-    const panelEditBtn = document.getElementById('panelEditBtn');
-
-    const today = new Date().toISOString().split('T')[0];
-    pdfDateFrom.value = today; pdfDateTo.value = today; formDate.value = today;
-
-    function initSelects() {
-      agentes.forEach(a => {
-        const o = document.createElement('option'); o.value = String(a.ext); o.textContent = `${a.nombre} — ${a.ext}`; pdfAgentFilter.appendChild(o);
-        const o2 = document.createElement('option'); o2.value = String(a.ext); o2.textContent = `${a.nombre} — ${a.ext}`; formAgent.appendChild(o2);
-      });
-    }
-    initSelects();
-let registros = [];
-let cargando = false;
-
-async function cargarRegistros() {
-  if (cargando) return;
-  cargando = true;
-
-  try {
-    let consulta = db.collection("agentes_sabado");
-
-    const from = pdfDateFrom.value;
-    const to = pdfDateTo.value;
-    const selected = pdfAgentFilter.value;
-
-    if (from) {
-      consulta = consulta.where("fecha", ">=", from);
+    function showToast(message, ms = 2800) {
+      toastEl.textContent = message;
+      toastEl.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toastEl.classList.remove("show"), ms);
     }
 
-    if (to) {
-      consulta = consulta.where("fecha", "<=", to);
+
+    function showBathroomAlert(message = "Espere a que otro agente regrese del baño.") {
+      const wrap = $("bathroomAlert");
+      const label = $("bathroomAlertText");
+      if (label) label.textContent = message;
+      if (!wrap) return;
+      wrap.classList.remove("hidden");
+      clearTimeout(showBathroomAlert._t);
+      showBathroomAlert._t = setTimeout(() => wrap.classList.add("hidden"), 2600);
     }
 
-    if (selected !== "all") {
-      consulta = consulta.where("extension", "==", Number(selected));
+    function emailKey(email) {
+      return String(email || "").trim().toLowerCase();
     }
 
-    const snap = await consulta.get();
-
-    registros = [];
-    snap.forEach(doc => {
-      registros.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
-
-    registros.sort((a, b) => {
-      if (a.fecha === b.fecha) return String(a.extension).localeCompare(String(b.extension));
-      return b.fecha.localeCompare(a.fecha);
-    });
-
-    renderGrid();
-
-  } catch (error) {
-    console.error("Error cargando registros:", error);
-  } finally {
-    cargando = false;
-  }
-}
-
-    function toMinutes(h) { if (!h) return null; const p = h.split(':').map(Number); if (p.length < 2 || p.some(isNaN)) return null; return p[0] * 60 + p[1]; }
-    function esc(s) { if (!s) return ''; return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
-    function formatearSegundos(segundos) {
-      const total = Number(segundos || 0);
-      const min = Math.floor(total / 60);
-      const sec = total % 60;
-      return `${min}:${String(sec).padStart(2, "0")}`;
+    function todayKey() {
+      return localDateKey(new Date());
     }
-    function renderGrid() {
 
-      const q = searchInput.value.trim().toLowerCase();
-      const filter = filterSelect.value;
-
-      const selectedAgent = pdfAgentFilter.value;
-      const from = pdfDateFrom.value;
-      const to = pdfDateTo.value;
-
-      grid.innerHTML = "";
-
-      registros.forEach(rec => {
-
-        const ext = String(rec.extension);
-        const name = rec.nombre;
-
-        const login = rec.login || "";
-        const logout = rec.logout || "";
-        const tiempoBanio = rec.tiempoBanio ?? 0;
-        const tiempoAlmuerzo = rec.tiempoAlmuerzo ?? 0;
-        const salientes = rec.salientes ?? 0;
-        const entrantes = rec.entrantes ?? 0;
-        const obs = rec.observaciones || "";
-
-        const agent = agentes.find(a => String(a.ext) === ext);
-const horario = agent ? obtenerHorarioAgente(agent, rec.fecha) : "08:00";
-        if (selectedAgent !== "all" && ext !== selectedAgent) return;
-
-        if (from) {
-          if (rec.fecha < from) return;
-        }
-
-        if (to) {
-          if (rec.fecha > to) return;
-        }
-        if (q) {
-          const inName = name.toLowerCase().includes(q);
-          const inExt = ext.includes(q);
-          if (!inName && !inExt) return;
-        }
-
-        let estado = "Sin marcar";
-        let badgeColor = "var(--muted)";
-
-        if (login) {
-
-          const lm = toMinutes(login);
-          const hm = toMinutes(horario);
-
-          if (lm === null) {
-            estado = "Hora inválida";
-            badgeColor = "var(--accent)";
-          }
-          else if (lm <= hm) {
-            estado = "Puntual";
-            badgeColor = "var(--green)";
-          }
-          else {
-            const r = lm - hm;
-            estado = `Retraso ${r} min`;
-            badgeColor = r <= 5 ? "var(--accent)" : "var(--red)";
-          }
-
-        }
-
-        if (filter === "puntual" && badgeColor !== "var(--green)") return;
-        if (filter === "leve" && badgeColor !== "var(--accent)") return;
-        if (filter === "retraso" && badgeColor !== "var(--red)") return;
-        if (filter === "sinmarcar" && login) return;
-
-        // tarjsta
-        const wrap = document.createElement("div");
-        wrap.className = "card-wrap";
-
-        const c = document.createElement("div");
-        c.className = "card";
-
-        c.innerHTML = `
-  <div class="card-header">
-    <div style="display:flex;gap:10px;align-items:center">
-      <div class="avatar">${name.charAt(0)}</div>
-      <div>
-        <div class="agent">${esc(name)}</div>
-        <div class="ext">Ext ${ext} • ${rec.fecha}</div>
-      </div>
-    </div>
-
-    <div style="text-align:right">
-      <div class="state" style="color:${badgeColor}">${estado}</div>
-      <div class="ext">${login || "-"} • ${logout || "-"}</div>
-    </div>
-  </div>
-
-  <div class="stats">
-    <div class="stat">
-      <div class="label">Baño</div>
-      <div class="value">${formatearSegundos(rec.tiempoBanio || 0)}</div>
-    </div>
-
-    <div class="stat">
-      <div class="label">Almuerzo</div>
-      <div class="value">${formatearSegundos(rec.tiempoAlmuerzo || 0)}</div>
-    </div>
-  </div>
-
-  <div class="stats">
-    <div class="stat">
-      <div class="label">Salientes</div>
-      <div class="value">${salientes}</div>
-    </div>
-
-    <div class="stat">
-      <div class="label">Entrantes</div>
-      <div class="value">${entrantes}</div>
-    </div>
-  </div>
-
-  <div class="note obs-box">
-    <strong>Observaciones:</strong><br>
-    ${esc(obs || "Sin observaciones")}
-  </div>
-
-<div class="note doc-box">
-  <strong>Archivo adjunto:</strong><br>
-  ${rec.archivoData && rec.archivoNombre
-    ? `<button onclick="event.stopPropagation(); abrirArchivo('${rec.archivoData}', '${esc(rec.archivoNombre)}')" class="btn ghost">📎 Ver / Descargar archivo</button>`
-    : "Sin archivo adjunto"}
-</div>
-`;
-
-        wrap.appendChild(c);
-        grid.appendChild(wrap);
-        c.style.cursor = "pointer";
-        c.addEventListener("click", () => {
-          showModal(rec.id);
-        });
-      });
-
+    function localDateKey(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
     }
-function openPanel(ext) {
-  const agent = agentes.find(a => String(a.ext) === String(ext));
-  const rec = registros.find(r => String(r.extension) === String(ext)) || {};
 
-  panelName.textContent = agent?.nombre || "Agente";
-  panelExt.textContent = 'Ext: ' + (agent?.ext || '-') + (rec.fecha ? ' • ' + rec.fecha : '');
-  panelTimes.textContent = `${rec.login || '-'} • ${rec.logout || '-'}`;
-  panelSalientes.textContent = rec.salientes ?? 0;
-  panelEntrantes.textContent = rec.entrantes ?? 0;
-  panelObs.textContent = rec.observaciones || 'Sin observación';
+    function nowTime() {
+      const d = new Date();
+      const h = String(d.getHours()).padStart(2, "0");
+      const m = String(d.getMinutes()).padStart(2, "0");
+      const s = String(d.getSeconds()).padStart(2, "0");
+      return `${h}:${m}:${s}`;
+    }
 
-  panelState.textContent = (() => {
-    if (!rec.login) return 'Sin marcar';
+    function nowTimeHM() {
+      const d = new Date();
+      const h = String(d.getHours()).padStart(2, "0");
+      const m = String(d.getMinutes()).padStart(2, "0");
+      return `${h}:${m}`;
+    }
 
-    const lm = toMinutes(rec.login);
-    if (lm === null) return 'Hora inválida';
+    function formatSeconds(total) {
+      const sec = Math.max(0, Math.floor(Number(total || 0)));
+      const h = String(Math.floor(sec / 3600)).padStart(2, "0");
+      const m = String(Math.floor((sec % 3600) / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${h}:${m}:${s}`;
+    }
 
-    const horario = agent ? obtenerHorarioAgente(agent, rec.fecha) : "08:00";
-    const hm = toMinutes(horario);
+    function formatSecondsShort(total) {
+      const sec = Math.max(0, Math.floor(Number(total || 0)));
+      const min = Math.floor(sec / 60);
+      const s = String(sec % 60).padStart(2, "0");
+      return `${min}:${s}`;
+    }
 
-    if (hm === null) return 'Sin horario';
-    if (lm <= hm) return 'Puntual';
+    function toMinutes(value) {
+      if (!value) return null;
+      const parts = String(value).split(":").map(Number);
+      if (parts.length < 2 || parts.some(Number.isNaN)) return null;
+      return parts[0] * 60 + parts[1];
+    }
 
-    const r = lm - hm;
-    return 'Retraso ' + r + ' min';
-  })();
+    function esc(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
 
-  rightPanel.classList.add('show');
-  panelEditBtn.onclick = () => showModal(rec.id);
-}
-    // modal
-    function showModal(docId) {
-      overlayEl.classList.add('show');
+    function setVisible(el, visible) {
+      el.classList.toggle("hidden", !visible);
+    }
 
-      let rec = null;
+    function setStatusBadge(el, statusKey) {
+      el.className = "status";
+      const key = statusKey || "disponible";
+      el.classList.add(key);
+      const labelMap = {
+        disponible: "Disponible",
+        baño: "En baño",
+        almuerzo: "En almuerzo",
+        break: "En break",
+        ausencia: "Ausencia",
+        excedido: "Excedido",
+        sinmarcar: "Sin marcar",
+        puntual: "Puntual",
+        leve: "Retraso leve",
+        retraso: "Retraso",
+        nolabora: "No labora"
+      };
+      el.textContent = labelMap[key] || key;
+    }
 
-      if (docId) {
-        rec = registros.find(r => r.id === docId);
-      }
+    function getRosterAgentByExt(ext) {
+      return AGENT_ROSTER.find(a => String(a.ext) === String(ext)) || null;
+    }
 
-      if (rec) {
-        formAgent.value = String(rec.extension);
-        formExt.value = String(rec.extension);
-        formDate.value = rec.fecha || today;
-        formLogin.value = rec.login || '';
-        formLogout.value = rec.logout || '';
-        formSalientes.value = rec.salientes ?? '';
-        formEntrantes.value = rec.entrantes ?? '';
-        formObs.value = rec.observaciones || '';
-        saveBtn.dataset.editingId = rec.id;
+    function getScheduleForDate(agent, fecha = null) {
+      let dayNumber;
+      if (fecha) {
+        const [y, m, d] = fecha.split("-").map(Number);
+        dayNumber = new Date(y, m - 1, d).getDay();
       } else {
-        const sel = formAgent.value || String(agentes[0].ext);
-        formAgent.value = sel;
-        formExt.value = sel;
-        formDate.value = today;
-        formLogin.value = '';
-        formLogout.value = '';
-        formSalientes.value = '';
-        formEntrantes.value = '';
-        formObs.value = '';
-        saveBtn.dataset.editingId = '';
+        dayNumber = new Date().getDay();
+      }
+      if (agent?.days) return agent.days[dayNumber] || null;
+      if (dayNumber === 6) return agent?.sabado ?? null;
+      return agent?.default ?? null;
+    }
+
+    function liveAccumulatedSeconds(record, target) {
+      let total = 0;
+
+      if (target === "baño") total = Number(record?.segundosBano) || 0;
+      if (target === "almuerzo") total = Number(record?.segundosAlmuerzo) || 0;
+      if (target === "break") total = Number(record?.segundosBreak) || 0;
+
+      if (record?.estado === target && record?.estadoInicioMs) {
+        total += Math.max(0, Math.floor((Date.now() - record.estadoInicioMs) / 1000));
+      }
+      return total;
+    }
+
+    function getPunctualityInfo(record) {
+      const agent = getRosterAgentByExt(record?.ext);
+      const schedule = agent ? getScheduleForDate(agent, record?.fecha) : null;
+      const login = record?.login || "";
+
+      if (!schedule) {
+        return { key: "nolabora", label: "No labora", color: "#ddd6fe", schedule: null, lateMinutes: 0 };
       }
 
-      document.getElementById("formPdf").value = "";
-    } function hideModal() { overlayEl.classList.remove('show'); }
+      if (!login) {
+        return { key: "sinmarcar", label: "Sin marcar", color: "#cbd5e1", schedule, lateMinutes: 0 };
+      }
 
-    //  modal agent select
-    function initModal() { agentes.forEach(a => { const o = document.createElement('option'); o.value = String(a.ext); o.textContent = `${a.nombre} — ${a.ext}`; formAgent.appendChild(o); }); }
-    initModal();
+      const lm = toMinutes(login);
+      const hm = toMinutes(schedule);
 
-    // shortcuts
-    document.addEventListener('keydown', (e) => { if (e.shiftKey && (e.key === 'R' || e.key === 'r')) { showModal(); } });
-    floatingBtn.addEventListener('click', () => showModal());
-    closeBtn.addEventListener('click', hideModal);
-    formAgent.addEventListener('change', () => formExt.value = formAgent.value);
+      if (lm === null || hm === null) {
+        return { key: "sinmarcar", label: "Hora inválida", color: "#fde68a", schedule, lateMinutes: 0 };
+      }
 
-    // save
-saveBtn.addEventListener('click', async () => {
-  const archivoFile = document.getElementById("formArchivo").files[0];
-  let archivoBase64 = "";
+      if (lm <= hm) {
+        return { key: "puntual", label: "Puntual", color: "#bbf7d0", schedule, lateMinutes: 0 };
+      }
 
-  const ext = String(formAgent.value);
-  const agent = agentes.find(a => String(a.ext) === ext);
-  if (!agent) {
-    alert('Agente inválido');
-    return;
-  }
+      const late = lm - hm;
+      if (late <= 5) {
+        return { key: "leve", label: `Retraso ${late} min`, color: "#fde68a", schedule, lateMinutes: late };
+      }
 
-  const login = formLogin.value.trim();
-  if (!login) {
-    alert('Ingresa Log in');
-    return;
-  }
+      return { key: "retraso", label: `Retraso ${late} min`, color: "#fecaca", schedule, lateMinutes: late };
+    }
 
-  const logout = formLogout.value.trim();
-  const salientes = Number(formSalientes.value || 0);
-  const entrantes = Number(formEntrantes.value || 0);
-  const obs = formObs.value.trim();
-  const fecha = formDate.value || today;
+    function buildRecordId(fecha, email) {
+      return `${fecha}__${emailKey(email)}`;
+    }
 
-  try {
-    const docId = `${ext}_${fecha}`;
-    const existente = registros.find(r => r.id === docId);
+    function defaultRecord(profile, fecha) {
+      return {
+        email: emailKey(profile.email),
+        nombre: profile.nombre,
+        ext: String(profile.ext),
+        rol: profile.rol || "agent",
+        fecha,
+        login: "",
+        logout: "",
+        estado: "disponible",
+        estadoInicioMs: null,
+        segundosBano: 0,
+        segundosAlmuerzo: 0,
+        segundosBreak: 0,
+        entrantes: 0,
+        salientes: 0,
+        observaciones: "",
+        estadoAnimo: "",
+        estadoAnimoEmoji: "",
+        pdf: "",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+    }
 
-    let archivoDataFinal = existente?.archivoData || "";
-    let archivoNombreFinal = existente?.archivoNombre || "";
-    let archivoTipoFinal = existente?.archivoTipo || "";
+    function getTodayRecordForCurrentAgent() {
+      if (!currentProfile) return null;
+      return todaySummaryRecords.find(r => emailKey(r.email) === emailKey(currentProfile.email)) || null;
+    }
 
-    if (archivoFile) {
-      if (archivoFile.size > 700 * 1024) {
-        alert("El archivo es demasiado grande. Usa uno menor a 700 KB.");
+
+    function updateMoodUI(record) {
+      const moodText = $("agMoodText");
+      const buttons = document.querySelectorAll(".mood-btn");
+      const mood = record?.estadoAnimo || "";
+      const emoji = record?.estadoAnimoEmoji || "";
+      if (moodText) moodText.textContent = mood ? `${emoji} ${mood.charAt(0).toUpperCase() + mood.slice(1)}` : "Sin elegir";
+      buttons.forEach(btn => {
+        const active = btn.dataset.mood === mood;
+        btn.classList.toggle("active", active);
+      });
+    }
+
+    async function saveMyMood(mood, emoji) {
+      if (!currentProfile || currentProfile.rol !== "agent") return;
+      const myRecord = getTodayRecordForCurrentAgent();
+      if (!myRecord) {
+        showToast("Primero debe existir tu registro del día.");
+        return;
+      }
+      await updateDoc(doc(db, RECORDS_COLLECTION, buildRecordId(todayKey(), currentProfile.email)), {
+        estadoAnimo: mood,
+        estadoAnimoEmoji: emoji,
+        updatedAt: serverTimestamp()
+      });
+      showToast("Estado de ánimo guardado.");
+    }
+
+    async function loginMicrosoft() {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error(error);
+        showToast("Error al iniciar sesión con Microsoft.");
+      }
+    }
+
+    async function logout() {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function ensureAdminProfile(user) {
+      const key = emailKey(user.email);
+      if (!ADMIN_EMAILS.includes(key)) return;
+
+      const adminData = ADMIN_PROFILES[key] || {
+        nombre: user.displayName || "Administrador",
+        ext: "ADMIN"
+      };
+
+      const ref = doc(db, USERS_COLLECTION, key);
+      const snap = await getDoc(ref);
+
+      if (!snap.exists()) {
+        await setDoc(ref, {
+          email: key,
+          nombre: adminData.nombre,
+          ext: adminData.ext,
+          rol: "admin",
+          activo: true,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      } else {
+        await setDoc(ref, {
+          email: key,
+          nombre: adminData.nombre,
+          ext: adminData.ext,
+          rol: "admin",
+          activo: true,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      }
+    }
+
+    async function getUserProfile(email) {
+      const ref = doc(db, USERS_COLLECTION, emailKey(email));
+      const snap = await getDoc(ref);
+      return snap.exists() ? snap.data() : null;
+    }
+
+    async function ensureTodayRecordForProfile(profile) {
+      if (!profile || !profile.email) return;
+
+      // Los admin NO deben tener registro diario
+      if (profile.rol === "admin") return;
+
+      const fecha = todayKey();
+      const id = buildRecordId(fecha, profile.email);
+      const ref = doc(db, RECORDS_COLLECTION, id);
+      const snap = await getDoc(ref);
+
+      if (!snap.exists()) {
+        const payload = defaultRecord(profile, fecha);
+        await setDoc(ref, payload);
+      } else {
+        const data = snap.data();
+        const patch = { updatedAt: serverTimestamp() };
+        let mustPatch = false;
+
+        if (!data.nombre || data.nombre !== profile.nombre) {
+          patch.nombre = profile.nombre;
+          mustPatch = true;
+        }
+
+        if (!data.ext || String(data.ext) !== String(profile.ext)) {
+          patch.ext = String(profile.ext);
+          mustPatch = true;
+        }
+
+        if (mustPatch) await updateDoc(ref, patch);
+      }
+    }
+    async function ensureTodayRecordsForAllActiveUsers() {
+      const fecha = todayKey();
+      const usersSnap = await getDocs(collection(db, USERS_COLLECTION));
+
+      for (const d of usersSnap.docs) {
+        const u = d.data();
+
+        if (!u.activo || !u.email) continue;
+
+        // No crear registros para admins
+        if (u.rol === "admin") continue;
+
+        const ref = doc(db, RECORDS_COLLECTION, buildRecordId(fecha, u.email));
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) {
+          await setDoc(ref, defaultRecord(u, fecha));
+        }
+      }
+
+      showToast("Se generaron los registros de hoy.");
+    }
+    async function handleDayChange() {
+      const newDay = todayKey();
+      if (newDay === activeOperationalDay) return;
+
+      activeOperationalDay = newDay;
+
+      // actualizar fechas visuales
+      if ($("filterFrom")) $("filterFrom").value = newDay;
+      if ($("filterTo")) $("filterTo").value = newDay;
+      if ($("recordDate")) $("recordDate").value = newDay;
+
+      // volver a suscribirse al nuevo día
+      await subscribeTodaySummary();
+
+      // si es agente, asegurar su nuevo registro del día automáticamente
+      if (currentProfile?.rol === "agent") {
+        await ensureTodayRecordForProfile(currentProfile);
+        renderAgentView();
+      }
+
+      // si es admin, refrescar vista del nuevo rango
+      if (currentProfile?.rol === "admin") {
+        await subscribeAdminRange();
+        renderAdminCards();
+      }
+
+      showToast(`Nuevo día detectado: ${newDay}`);
+    }
+
+    function startDayWatcher() {
+      if (dayWatcherTimer) clearInterval(dayWatcherTimer);
+
+      activeOperationalDay = todayKey();
+
+      dayWatcherTimer = setInterval(() => {
+        handleDayChange().catch(err => console.error("Error al cambiar de día:", err));
+      }, 60000); // revisa cada 60 segundos
+    }
+
+    function stopDayWatcher() {
+      if (dayWatcherTimer) {
+        clearInterval(dayWatcherTimer);
+        dayWatcherTimer = null;
+      }
+    }
+
+    async function setMyStatus(nextStatus) {
+      if (!currentProfile || currentProfile.rol !== "agent") return;
+      const myRecord = getTodayRecordForCurrentAgent();
+      if (!myRecord) {
+        showToast("No se encontró tu registro de hoy.");
         return;
       }
 
-      const reader = new FileReader();
-      archivoBase64 = await new Promise((resolve) => {
-        reader.onload = () => resolve(reader.result);
-        reader.readAsDataURL(archivoFile);
-      });
+      if (nextStatus === "baño" && myRecord.estado !== "baño") {
+        const enBano = todaySummaryRecords.filter(r =>
+          r.fecha === todayKey() &&
+          r.estado === "baño" &&
+          emailKey(r.email) !== emailKey(currentProfile.email)
+        );
+        if (enBano.length >= MAX_BANO) {
+          showBathroomAlert();
+          return;
+        }
+      }
 
-      archivoDataFinal = archivoBase64;
-      archivoNombreFinal = archivoFile.name;
-      archivoTipoFinal = archivoFile.type || "application/octet-stream";
+      const ref = doc(db, RECORDS_COLLECTION, buildRecordId(todayKey(), currentProfile.email));
+      const snap = await getDoc(ref);
+      if (!snap.exists()) return;
+      const data = snap.data();
+
+      let segundosBano = Number(data.segundosBano || 0);
+      let segundosAlmuerzo = Number(data.segundosAlmuerzo || 0);
+      let segundosBreak = Number(data.segundosBreak || 0);
+
+      if (data.estado === "baño" && data.estadoInicioMs) {
+        segundosBano += Math.max(0, Math.floor((Date.now() - data.estadoInicioMs) / 1000));
+      }
+      if (data.estado === "almuerzo" && data.estadoInicioMs) {
+        segundosAlmuerzo += Math.max(0, Math.floor((Date.now() - data.estadoInicioMs) / 1000));
+      }
+      if (data.estado === "break" && data.estadoInicioMs) {
+        segundosBreak += Math.max(0, Math.floor((Date.now() - data.estadoInicioMs) / 1000));
+      }
+
+      const payload = {
+        estado: nextStatus,
+        estadoInicioMs: nextStatus === "disponible" ? null : Date.now(),
+        segundosBano,
+        segundosAlmuerzo,
+        segundosBreak,
+        updatedAt: serverTimestamp()
+      };
+
+      await updateDoc(ref, payload);
     }
 
-    await db.collection('agentes_sabado').doc(docId).set({
-      nombre: agent.nombre,
-      extension: Number(ext),
-      fecha,
-      login,
-      logout,
-      salientes,
-      entrantes,
-      observaciones: obs,
-      archivoData: archivoDataFinal,
-      archivoNombre: archivoNombreFinal,
-      archivoTipo: archivoTipoFinal,
-      tiempoBanio: existente?.tiempoBanio ?? 0,
-      tiempoAlmuerzo: existente?.tiempoAlmuerzo ?? 0,
-      tiempoBanioTexto: existente?.tiempoBanioTexto ?? "0:00",
-      tiempoAlmuerzoTexto: existente?.tiempoAlmuerzoTexto ?? "0:00",
-      timestamp: Date.now()
-    }, { merge: true });
+    async function registerMyCalls(tipo, cantidad) {
+      if (!currentProfile || currentProfile.rol !== "agent") return;
+      const qty = Number(cantidad || 0);
+      if (!qty || qty < 1) {
+        showToast("Ingrese una cantidad válida.");
+        return;
+      }
 
-      hideModal();
-      await cargarRegistros();
-  } catch (err) {
-    console.error('Guardar', err);
-    alert('Error al guardar. Revise consola.');
-  }
-});
+      const id = buildRecordId(todayKey(), currentProfile.email);
+      const ref = doc(db, RECORDS_COLLECTION, id);
 
-    // filters
-searchInput.addEventListener('input', renderGrid);
-filterSelect.addEventListener('change', renderGrid);
-compactCheckbox.addEventListener('change', renderGrid);
+      await updateDoc(ref, {
+        [tipo === "Entrante" ? "entrantes" : "salientes"]: increment(qty),
+        updatedAt: serverTimestamp()
+      });
 
-pdfAgentFilter.addEventListener('change', cargarRegistros);
-pdfDateFrom.addEventListener('change', cargarRegistros);
-pdfDateTo.addEventListener('change', cargarRegistros);
-    // pdf
-    document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+      await addDoc(collection(db, CALLS_COLLECTION), {
+        fecha: todayKey(),
+        email: emailKey(currentProfile.email),
+        nombre: currentProfile.nombre,
+        ext: String(currentProfile.ext),
+        tipo,
+        cantidad: qty,
+        createdAt: serverTimestamp(),
+        createdAtMs: Date.now()
+      });
+
+      $("agentCallQty").value = 1;
+      showToast(`Se registraron ${qty} llamadas ${tipo.toLowerCase()}.`);
+    }
+
+    async function markMyLogin() {
+      if (!currentProfile || currentProfile.rol !== "agent") return;
+      await updateDoc(doc(db, RECORDS_COLLECTION, buildRecordId(todayKey(), currentProfile.email)), {
+        login: nowTimeHM(),
+        updatedAt: serverTimestamp()
+      });
+      showToast("Log in actualizado.");
+    }
+
+    async function markMyLogout() {
+      if (!currentProfile || currentProfile.rol !== "agent") return;
+      await updateDoc(doc(db, RECORDS_COLLECTION, buildRecordId(todayKey(), currentProfile.email)), {
+        logout: nowTimeHM(),
+        updatedAt: serverTimestamp()
+      });
+      showToast("Log out actualizado.");
+    }
+
+    async function saveAccessProfile() {
+      if (currentProfile?.rol !== "admin") return;
+      const rosterValue = $("accessRosterSelect").value;
+      const email = emailKey($("accessEmail").value);
+      const role = $("accessRole").value;
+      const activo = $("accessActive").value === "true";
+      const rosterAgent = getRosterAgentByExt(rosterValue);
+
+      if (!rosterAgent) {
+        showToast("Seleccione un agente válido.");
+        return;
+      }
+      if (!email || !email.includes("@")) {
+        showToast("Ingrese un correo válido.");
+        return;
+      }
+
+      await setDoc(doc(db, USERS_COLLECTION, email), {
+        email,
+        nombre: rosterAgent.nombre,
+        ext: String(rosterAgent.ext),
+        rol: role,
+        activo,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+
+      showToast("Acceso guardado correctamente.");
+      clearAccessForm();
+    }
+
+    function clearAccessForm() {
+      $("accessEmail").value = "";
+      $("accessRole").value = "agent";
+      $("accessActive").value = "true";
+      if (AGENT_ROSTER[0]) $("accessRosterSelect").value = String(AGENT_ROSTER[0].ext);
+    }
+
+    function fillAccessFormFromUser(userData) {
+      $("accessEmail").value = userData.email || "";
+      $("accessRole").value = userData.rol || "agent";
+      $("accessActive").value = String(Boolean(userData.activo));
+      $("accessRosterSelect").value = String(userData.ext || AGENT_ROSTER[0]?.ext || "");
+    }
+
+    function renderAccessUsers() {
+      const box = $("accessList");
+      if (!box) return;
+      if (!accessUsers.length) {
+        box.innerHTML = `<div class="muted">Sin usuarios registrados todavía.</div>`;
+        return;
+      }
+
+      box.innerHTML = accessUsers
+        .slice()
+        .sort((a, b) => String(a.nombre || "").localeCompare(String(b.nombre || "")))
+        .map(user => `
+          <div class="access-item" data-email="${esc(user.email)}">
+            <div style="font-weight:900;">${esc(user.nombre || user.email)}</div>
+            <div class="mini" style="margin-top:4px;">${esc(user.email)} • Ext ${esc(user.ext || "-")}</div>
+            <div class="row" style="justify-content:space-between; margin-top:8px;">
+              <span class="mini-badge">${user.rol === "admin" ? "Admin" : "Agente"}</span>
+              <span class="mini-badge">${user.activo ? "Activo" : "Inactivo"}</span>
+            </div>
+          </div>
+        `).join("");
+
+      box.querySelectorAll(".access-item").forEach(el => {
+        el.addEventListener("click", () => {
+          const user = accessUsers.find(u => emailKey(u.email) === emailKey(el.dataset.email));
+          if (user) fillAccessFormFromUser(user);
+        });
+      });
+    }
+
+    function populateRosterSelects() {
+      const rosterOptions = AGENT_ROSTER
+        .slice()
+        .sort((a, b) => Number(a.ext) - Number(b.ext))
+        .map(a => `<option value="${a.ext}">${esc(a.nombre)} — ${a.ext}</option>`)
+        .join("");
+      $("accessRosterSelect").innerHTML = rosterOptions;
+      if (AGENT_ROSTER[0]) $("accessRosterSelect").value = String(AGENT_ROSTER[0].ext);
+    }
+
+    function populateRecordUserSelect() {
+      const select = $("recordUserSelect");
+      const options = accessUsers
+        .filter(u => u.email && u.rol !== "admin")
+        .slice()
+        .sort((a, b) => String(a.nombre || "").localeCompare(String(b.nombre || "")))
+        .map(u => `<option value="${esc(u.email)}">${esc(u.nombre || u.email)} — ${esc(u.ext || "-")}</option>`)
+        .join("");
+      select.innerHTML = options || `<option value="">Sin usuarios</option>`;
+      syncRecordUserFields();
+    }
+
+    function populateAdminFilterAgents() {
+      const select = $("filterAgent");
+      const current = select.value;
+      const opts = [`<option value="all">Todos los agentes</option>`].concat(
+        accessUsers
+          .filter(u => u.rol === "agent")
+          .slice()
+          .sort((a, b) => Number(a.ext || 0) - Number(b.ext || 0))
+          .map(u => `<option value="${esc(u.ext)}">${esc(u.nombre)} — ${esc(u.ext)}</option>`)
+      );
+      select.innerHTML = opts.join("");
+      if ([...select.options].some(o => o.value === current)) select.value = current;
+    }
+
+    function syncRecordUserFields() {
+      const email = emailKey($("recordUserSelect").value);
+      const user = accessUsers.find(u => emailKey(u.email) === email);
+      $("recordExt").value = user?.ext || "";
+    }
+    function summarizeNames(items, emptyLabel = "Nadie") {
+      const count = items.length;
+      if (!count) {
+        return { html: `<span class="summary-empty">${emptyLabel}</span>`, meta: "0 agentes" };
+      }
+      const names = items.map(i => i.nombre).filter(Boolean);
+      const visibleNames = names.slice(0, 2);
+      const extra = Math.max(0, names.length - visibleNames.length);
+      const html = visibleNames.map(name => `<span class="summary-name-line">${esc(name)}</span>`).join("");
+      const metaParts = [`${count} agente${count === 1 ? "" : "s"}`];
+      if (extra > 0) metaParts.push(`+${extra} más`);
+      return { html, meta: metaParts.join(" • ") };
+    }
+
+    function renderGlobalSummary(records) {
+      const today = todayKey();
+      const activos = records.filter(r => r.fecha === today && (r.estado || "disponible") !== "ausencia");
+      const total = activos.length;
+      const enBano = records.filter(r => r.fecha === today && r.estado === "baño");
+      const enAlmuerzo = records.filter(r => r.fecha === today && r.estado === "almuerzo");
+      const enBreak = records.filter(r => r.fecha === today && r.estado === "break");
+      const disponibles = activos.filter(r => (r.estado || "disponible") === "disponible");
+      $("kpiTotal").textContent = total;
+      $("kpiBano").textContent = enBano.length;
+      $("kpiAlmuerzo").textContent = enAlmuerzo.length;
+      if ($("kpiBreak")) $("kpiBreak").textContent = enBreak.length;
+      $("kpiDisponibles").textContent = disponibles.length;
+
+      const banoSummary = summarizeNames(enBano);
+      const almuerzoSummary = summarizeNames(enAlmuerzo);
+      const breakSummary = summarizeNames(enBreak);
+
+      $("listaBano").innerHTML = banoSummary.html;
+      $("listaAlmuerzo").innerHTML = almuerzoSummary.html;
+      $("listaBreak").innerHTML = breakSummary.html;
+
+      $("listaBanoMeta").textContent = banoSummary.meta;
+      $("listaAlmuerzoMeta").textContent = almuerzoSummary.meta;
+      $("listaBreakMeta").textContent = breakSummary.meta;
+
+      const elBanoAgent = $("listaBanoAgent");
+      const elAlmuerzoAgent = $("listaAlmuerzoAgent");
+      const elBreakAgent = $("listaBreakAgent");
+
+      if (elBanoAgent) elBanoAgent.innerHTML = banoSummary.html;
+      if (elAlmuerzoAgent) elAlmuerzoAgent.innerHTML = almuerzoSummary.html;
+      if (elBreakAgent) elBreakAgent.innerHTML = breakSummary.html;
+
+      const elBanoAgentMeta = $("listaBanoAgentMeta");
+      const elAlmuerzoAgentMeta = $("listaAlmuerzoAgentMeta");
+      const elBreakAgentMeta = $("listaBreakAgentMeta");
+
+      if (elBanoAgentMeta) elBanoAgentMeta.textContent = banoSummary.meta;
+      if (elAlmuerzoAgentMeta) elAlmuerzoAgentMeta.textContent = almuerzoSummary.meta;
+      if (elBreakAgentMeta) elBreakAgentMeta.textContent = breakSummary.meta;
+
+      $("infoTodayDate").textContent = `Fecha operativa: ${today}`;
+
+      window.__summaryGroups = {
+        "baño": enBano,
+        "almuerzo": enAlmuerzo,
+        "break": enBreak
+      };
+    }
+
+    function renderAgentView() {
+      if (!currentProfile) return;
+
+      const record = getTodayRecordForCurrentAgent();
+
+      const agNombre = $("agNombre");
+      const agCorreo = $("agCorreo");
+      const agExt = $("agExt");
+      const agFecha = $("agFecha");
+      const agHorario = $("agHorario");
+      const agLogin = $("agLogin");
+      const agPuntualidad = $("agPuntualidad");
+      const agTiempoBano = $("agTiempoBano");
+      const agTiempoAlmuerzo = $("agTiempoAlmuerzo");
+      const agTiempoBreak = $("agTiempoBreak");
+      const agEntrantes = $("agEntrantes");
+      const agSalientes = $("agSalientes");
+      const agEstadoBadge = $("agEstadoBadge");
+
+      if (agNombre) agNombre.textContent = currentProfile.nombre || "-";
+      if (agCorreo) agCorreo.textContent = currentProfile.email || "-";
+      if (agExt) agExt.textContent = currentProfile.ext || "-";
+      if (agFecha) agFecha.textContent = todayKey();
+
+      const rosterAgent = getRosterAgentByExt(currentProfile.ext);
+      const schedule = rosterAgent ? getScheduleForDate(rosterAgent, todayKey()) : null;
+      if (agHorario) agHorario.textContent = schedule || "No asignado";
+
+      if (!record) {
+        if (agLogin) agLogin.textContent = "-";
+        if (agPuntualidad) agPuntualidad.textContent = "-";
+        if (agTiempoBano) agTiempoBano.textContent = "00:00:00";
+        if (agTiempoAlmuerzo) agTiempoAlmuerzo.textContent = "00:00:00";
+        if (agTiempoBreak) agTiempoBreak.textContent = "00:00:00";
+        if (agEntrantes) agEntrantes.textContent = "0";
+        if (agSalientes) agSalientes.textContent = "0";
+
+        updateMoodUI(null);
+        if (agEstadoBadge) setStatusBadge(agEstadoBadge, "disponible");
+
+        const mainCard = document.querySelector(".agent-main-card");
+        if (mainCard) {
+          mainCard.classList.remove("state-baño", "state-almuerzo", "state-break");
+          mainCard.classList.add("state-disponible");
+        }
+        return;
+      }
+
+      if (agLogin) agLogin.textContent = record.login || "-";
+      if (agEntrantes) agEntrantes.textContent = String(record.entrantes ?? 0);
+      if (agSalientes) agSalientes.textContent = String(record.salientes ?? 0);
+      if (agTiempoBano) agTiempoBano.textContent = formatSeconds(liveAccumulatedSeconds(record, "baño"));
+      if (agTiempoAlmuerzo) agTiempoAlmuerzo.textContent = formatSeconds(liveAccumulatedSeconds(record, "almuerzo"));
+      if (agTiempoBreak) agTiempoBreak.textContent = formatSeconds(liveAccumulatedSeconds(record, "break"));
+
+      updateMoodUI(record);
+
+      const p = getPunctualityInfo(record);
+      if (agPuntualidad) {
+        agPuntualidad.textContent = p.label;
+        agPuntualidad.style.color = p.color;
+      }
+
+      let statusKey = record.estado || "disponible";
+      const liveBathroom = liveAccumulatedSeconds(record, "baño");
+      const liveLunch = liveAccumulatedSeconds(record, "almuerzo");
+      const liveBreak = liveAccumulatedSeconds(record, "break");
+
+      if (record.estado === "baño" && liveBathroom > 15 * 60) statusKey = "excedido";
+      if (record.estado === "almuerzo" && liveLunch > 60 * 60) statusKey = "excedido";
+      if (record.estado === "break" && liveBreak > 15 * 60) statusKey = "excedido";
+
+      if (agEstadoBadge) setStatusBadge(agEstadoBadge, statusKey);
+
+      const mainCard = document.querySelector(".agent-main-card");
+      if (mainCard) {
+        mainCard.classList.remove("state-disponible", "state-baño", "state-almuerzo", "state-break", "state-ausencia");
+        if (record.estado === "baño") mainCard.classList.add("state-baño");
+        else if (record.estado === "almuerzo") mainCard.classList.add("state-almuerzo");
+        else if (record.estado === "break") mainCard.classList.add("state-break");
+        else if (record.estado === "ausencia") mainCard.classList.add("state-ausencia");
+        else mainCard.classList.add("state-disponible");
+      }
+    }
+
+    function getFilteredAdminRecords() {
+      const q = $("searchInput").value.trim().toLowerCase();
+      const filter = $("filterStatus").value;
+      const selectedExt = $("filterAgent").value;
+
+      return adminRangeRecords.filter(rec => {
+        if (rec.rol === "admin") return false;
+
+        if (selectedExt !== "all" && String(rec.ext) !== String(selectedExt)) return false;
+
+        if (q) {
+          const blob = `${rec.nombre || ""} ${rec.email || ""} ${rec.ext || ""}`.toLowerCase();
+          if (!blob.includes(q)) return false;
+        }
+
+        const punctuality = getPunctualityInfo(rec);
+        if (filter === "puntual" && punctuality.key !== "puntual") return false;
+        if (filter === "leve" && punctuality.key !== "leve") return false;
+        if (filter === "retraso" && punctuality.key !== "retraso") return false;
+        if (filter === "sinmarcar" && punctuality.key !== "sinmarcar") return false;
+        if (["baño", "almuerzo", "break", "disponible", "ausencia"].includes(filter) && (rec.estado || "disponible") !== filter) return false;
+        return true;
+      }).sort((a, b) => {
+        if (a.fecha === b.fecha) return String(a.ext).localeCompare(String(b.ext));
+        return String(b.fecha).localeCompare(String(a.fecha));
+      });
+    }
+
+    function renderAdminSummary() { return; }
+
+    function renderAdminCards() {
+      const box = $("adminCards");
+      const records = getFilteredAdminRecords();
+
+      if (!records.length) {
+        box.innerHTML = `<div class="card"><div class="muted">No hay registros para los filtros seleccionados.</div></div>`;
+        return;
+      }
+
+      box.innerHTML = records.map(rec => {
+        const p = getPunctualityInfo(rec);
+        const liveBano = rec.fecha === todayKey() ? liveAccumulatedSeconds(rec, "baño") : Number(rec.segundosBano || 0);
+        const liveAlmuerzo = rec.fecha === todayKey() ? liveAccumulatedSeconds(rec, "almuerzo") : Number(rec.segundosAlmuerzo || 0);
+        const liveBreak = rec.fecha === todayKey() ? liveAccumulatedSeconds(rec, "break") : Number(rec.segundosBreak || 0);
+        const isPastRecord = rec.fecha !== todayKey();
+        const stateKey = isPastRecord
+          ? "finalizado"
+          : (
+            (rec.estado === "baño" && liveBano > 15 * 60) ||
+              (rec.estado === "almuerzo" && liveAlmuerzo > 60 * 60) ||
+              (rec.estado === "break" && liveBreak > 15 * 60)
+              ? "excedido"
+              : (rec.estado || "disponible")
+          );
+        const obsText = rec.observaciones ? esc(rec.observaciones.length > 180 ? rec.observaciones.slice(0, 180) + "..." : rec.observaciones) : "Sin observaciones";
+        const moodText = rec.estadoAnimo ? `${esc(rec.estadoAnimoEmoji || "🙂")} ${esc(rec.estadoAnimo.charAt(0).toUpperCase() + rec.estadoAnimo.slice(1))}` : "";
+        return `
+          <div class="report-card" data-record-id="${esc(rec.id)}">
+            <div class="card-date-row">
+              <div class="card-date-badge">📅 ${esc(rec.fecha || "-")}</div>
+              <div class="mini-badge" style="color:${p.color};">${esc(p.label)}</div>
+            </div>
+
+            <div class="card-header">
+              <div style="display:flex;gap:10px;align-items:center;min-width:0;">
+                <div class="avatar">${esc((rec.nombre || "?").charAt(0).toUpperCase())}</div>
+                <div style="min-width:0;">
+                  <div class="agent-name">${esc(rec.nombre || "-")}</div>
+                  <div class="agent-meta">Ext ${esc(rec.ext || "-")}</div>
+                  <div class="agent-meta">${esc(rec.email || "")}</div>
+                </div>
+              </div>
+              <div class="state-stack">
+<div class="status ${stateKey}">${stateKey === "baño" ? "En baño" :
+            stateKey === "almuerzo" ? "En almuerzo" :
+              stateKey === "break" ? "En break" :
+                stateKey === "ausencia" ? "Ausencia" :
+                  stateKey === "excedido" ? "Excedido" :
+                    stateKey === "finalizado" ? "Turno finalizado" :
+                      "Disponible"
+          }</div>            </div>
+            </div>
+
+            <div class="card-info-strip">
+              <div class="card-info-chip">
+                <div class="label">Horario</div>
+                <div class="value">${esc(p.schedule || "No labora")}</div>
+              </div>
+              <div class="card-info-chip">
+                <div class="label">Log in</div>
+                <div class="value">${esc(rec.login || "-")}</div>
+              </div>
+              <div class="card-info-chip">
+                <div class="label">Log out</div>
+                <div class="value">${esc(rec.logout || "-")}</div>
+              </div>
+            </div>
+
+            <div class="report-stats">
+<div class="report-stat"><div class="label">Baño</div><div class="value">${formatSecondsShort(liveBano)}</div></div>
+<div class="report-stat"><div class="label">Almuerzo</div><div class="value">${formatSecondsShort(liveAlmuerzo)}</div></div>
+<div class="report-stat"><div class="label">Break</div><div class="value">${formatSecondsShort(liveBreak)}</div></div>
+<div class="report-stat"><div class="label">Entrantes</div><div class="value">${rec.entrantes ?? 0}</div></div>
+<div class="report-stat"><div class="label">Salientes</div><div class="value">${rec.salientes ?? 0}</div></div>
+            </div>
+
+            ${moodText ? `
+            <div class="mood-admin-note">
+              <strong>Estado de ánimo</strong>
+              ${moodText}
+            </div>` : ""}
+
+            <div class="note">
+              <strong>Observaciones</strong>
+              ${obsText}
+            </div>
+
+            <div class="report-actions">
+              <button class="btn-secondary btn-edit-record" data-record-id="${esc(rec.id)}">Editar</button>
+              ${rec.pdf ? `<button class="btn-secondary btn-open-pdf" data-record-id="${esc(rec.id)}">Ver PDF</button>` : `<button class="btn-secondary" disabled>Sin PDF</button>`}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      box.querySelectorAll(".btn-edit-record").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openRecordModal(btn.dataset.recordId);
+        });
+      });
+
+      box.querySelectorAll(".btn-open-pdf").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const rec = adminRangeRecords.find(r => r.id === btn.dataset.recordId);
+          if (rec?.pdf) openPdf(rec.pdf);
+        });
+      });
+    }
+
+    function startLiveTimer() {
+      if (liveTimer) clearInterval(liveTimer);
+      liveTimer = setInterval(() => {
+        if (currentProfile?.rol === "agent") renderAgentView();
+        if (currentProfile?.rol === "admin") renderAdminCards();
+      }, 1000);
+    }
+
+    async function subscribeTodaySummary() {
+      if (unsubTodaySummary) unsubTodaySummary();
+
+      const q = query(collection(db, RECORDS_COLLECTION), where("fecha", "==", todayKey()));
+
+      unsubTodaySummary = onSnapshot(q, snap => {
+        todaySummaryRecords = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .filter(r => r.rol !== "admin");
+
+        renderGlobalSummary(todaySummaryRecords);
+
+        if (currentProfile?.rol === "agent") renderAgentView();
+        if (currentProfile?.rol === "admin") renderAdminCards();
+      }, error => console.error(error));
+    }
+
+    function currentRangeValues() {
+      return {
+        from: $("filterFrom").value || todayKey(),
+        to: $("filterTo").value || todayKey()
+      };
+    }
+
+    async function subscribeAdminRange() {
+      if (unsubAdminRange) unsubAdminRange();
+
+      const { from, to } = currentRangeValues();
+      const q = query(
+        collection(db, RECORDS_COLLECTION),
+        where("fecha", ">=", from),
+        where("fecha", "<=", to)
+      );
+
+      unsubAdminRange = onSnapshot(q, snap => {
+        adminRangeRecords = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .filter(r => r.rol !== "admin");
+
+        renderAdminCards();
+      }, error => console.error(error));
+    }
+    async function subscribeUsers() {
+      if (unsubUsers) unsubUsers();
+      unsubUsers = onSnapshot(collection(db, USERS_COLLECTION), snap => {
+        accessUsers = snap.docs.map(d => d.data());
+        populateRecordUserSelect();
+        populateAdminFilterAgents();
+        if (currentProfile?.rol === "admin") renderAccessUsers();
+      }, error => console.error(error));
+    }
+
+    function openRecordModal(recordId = "") {
+      $("recordModalOverlay").classList.add("show");
+      $("recordPdf").value = "";
+      $("recordRemovePdf").checked = false;
+      $("recordDate").value = todayKey();
+      $("btnSaveRecord").dataset.recordId = recordId || "";
+
+      const record = adminRangeRecords.find(r => r.id === recordId) || todaySummaryRecords.find(r => r.id === recordId) || null;
+      if (record) {
+        $("recordUserSelect").value = record.email || "";
+        syncRecordUserFields();
+        $("recordDate").value = record.fecha || todayKey();
+        $("recordState").value = record.estado || "disponible";
+        $("recordLogin").value = (record.login || "").slice(0, 5);
+        $("recordLogout").value = (record.logout || "").slice(0, 5);
+        $("recordEntrantes").value = Number(record.entrantes || 0);
+        $("recordSalientes").value = Number(record.salientes || 0);
+        $("recordSegBano").value = Number(record.segundosBano || 0);
+        $("recordSegAlmuerzo").value = Number(record.segundosAlmuerzo || 0);
+        $("recordObs").value = record.observaciones || "";
+        $("recordPdfInfo").textContent = record.pdf ? "Este registro ya tiene PDF adjunto." : "Sin PDF actual.";
+      } else {
+        if (accessUsers[0]) $("recordUserSelect").value = accessUsers[0].email;
+        syncRecordUserFields();
+        $("recordState").value = "disponible";
+        $("recordLogin").value = "";
+        $("recordLogout").value = "";
+        $("recordEntrantes").value = 0;
+        $("recordSalientes").value = 0;
+        $("recordSegBano").value = 0;
+        $("recordSegAlmuerzo").value = 0;
+        $("recordObs").value = "";
+        $("recordPdfInfo").textContent = "Sin PDF actual.";
+      }
+    }
+
+    function closeRecordModal() {
+      $("recordModalOverlay").classList.remove("show");
+    }
+
+    async function fileToDataURL(file) {
+      return await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function saveRecordFromModal() {
+      if (currentProfile?.rol !== "admin") return;
+      const email = emailKey($("recordUserSelect").value);
+      const user = accessUsers.find(u => emailKey(u.email) === email);
+      if (!user) {
+        showToast("Seleccione un usuario válido.");
+        return;
+        if (user.rol === "admin") {
+          showToast("No se pueden crear registros para administradores.");
+          return;
+        }
+      }
+
+      const fecha = $("recordDate").value || todayKey();
+      const id = buildRecordId(fecha, user.email);
+      const existing = adminRangeRecords.find(r => r.id === id) || todaySummaryRecords.find(r => r.id === id) || null;
+
+      let pdfValue = existing?.pdf || "";
+      if ($("recordRemovePdf").checked) pdfValue = "";
+      const file = $("recordPdf").files[0];
+      if (file) pdfValue = await fileToDataURL(file);
+
+      const nuevoEstado = $("recordState").value || "disponible";
+      const estadoAnterior = existing?.estado || "disponible";
+
+      const payload = {
+        email: emailKey(user.email),
+        nombre: user.nombre,
+        ext: String(user.ext),
+        rol: user.rol || "agent",
+        fecha,
+        estado: nuevoEstado,
+        estadoInicioMs: existing?.estadoInicioMs || null,
+        login: $("recordLogin").value || "",
+        logout: $("recordLogout").value || "",
+        entrantes: Number($("recordEntrantes").value || 0),
+        salientes: Number($("recordSalientes").value || 0),
+        segundosBano: Number($("recordSegBano").value || 0),
+        segundosAlmuerzo: Number($("recordSegAlmuerzo").value || 0),
+        segundosBreak: Number(existing?.segundosBreak || 0),
+        observaciones: $("recordObs").value.trim(),
+        estadoAnimo: existing?.estadoAnimo || "",
+        estadoAnimoEmoji: existing?.estadoAnimoEmoji || "",
+        pdf: pdfValue,
+        createdAt: existing?.createdAt || serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+
+      if (["baño", "almuerzo", "break"].includes(nuevoEstado)) {
+        if (estadoAnterior !== nuevoEstado || !existing?.estadoInicioMs) {
+          payload.estadoInicioMs = Date.now();
+        }
+      } else {
+        payload.estadoInicioMs = null;
+      }
+
+      await setDoc(doc(db, RECORDS_COLLECTION, id), payload, { merge: true });
+      closeRecordModal();
+      showToast("Registro guardado correctamente.");
+    }
+
+    function openPdf(dataUrl) {
+      $("pdfViewer").src = dataUrl;
+      $("pdfModalOverlay").classList.add("show");
+    }
+
+    function closePdf() {
+      $("pdfViewer").src = "";
+      $("pdfModalOverlay").classList.remove("show");
+    }
+
+    async function resetTodayTestData() {
+      if (currentProfile?.rol !== "admin") return;
+      if (!confirm("¿Seguro que deseas reiniciar los registros del día actual en la base de prueba?")) return;
+
+      const today = todayKey();
+      const recordsSnap = await getDocs(query(collection(db, RECORDS_COLLECTION), where("fecha", "==", today)));
+
+      for (const d of recordsSnap.docs) {
+        const data = d.data();
+        if (data.rol === "admin") continue;
+
+        await setDoc(d.ref, {
+          login: "",
+          logout: "",
+          estado: "disponible",
+          estadoInicioMs: null,
+          segundosBano: 0,
+          segundosAlmuerzo: 0,
+          segundosBreak: 0,
+          entrantes: 0,
+          salientes: 0,
+          observaciones: "",
+          pdf: "",
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      }
+
+      const callsSnap = await getDocs(query(collection(db, CALLS_COLLECTION), where("fecha", "==", today)));
+      for (const d of callsSnap.docs) {
+        const batch = writeBatch(db);
+        batch.delete(d.ref);
+        await batch.commit();
+      }
+
+      showToast("Se reinició el día actual en la base de prueba.");
+    }
+
+    function buildPdfRows(records) {
+      return records.map(rec => {
+        const p = getPunctualityInfo(rec);
+        return [
+          rec.nombre || "",
+          rec.ext || "",
+          rec.fecha || "",
+          rec.login || "",
+          rec.logout || "",
+          formatSecondsShort(Number(rec.segundosBano || 0)),
+          formatSecondsShort(Number(rec.segundosAlmuerzo || 0)),
+          Number(rec.salientes || 0),
+          Number(rec.entrantes || 0),
+          p.label,
+          rec.observaciones || ""
+        ];
+      });
+    }
+
+    function downloadCurrentPdf() {
+      if (currentProfile?.rol !== "admin") return;
+      const records = getFilteredAdminRecords();
+      if (!records.length) {
+        showToast("No hay datos para exportar.");
+        return;
+      }
+
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF('p', 'mm', 'a4');
+      const docPdf = new jsPDF("l", "mm", "a4");
+      const { from, to } = currentRangeValues();
+      docPdf.setFontSize(15);
+      docPdf.text("Reporte de agentes — Operaciones unificadas", 148, 14, null, null, "center");
+      docPdf.setFontSize(10);
+      docPdf.text(`Rango: ${from} a ${to}`, 148, 20, null, null, "center");
 
-      const from = pdfDateFrom.value;
-      const to = pdfDateTo.value;
-      const selected = pdfAgentFilter.value;
-
-      const rows = [];
-
-      const registrosFiltrados = registros
-        .filter(rec => {
-          const ext = String(rec.extension);
-
-          if (selected !== 'all' && ext !== String(selected)) return false;
-          if (from && rec.fecha < from) return false;
-          if (to && rec.fecha > to) return false;
-
-          return true;
-        })
-        .sort((a, b) => {
-          if (a.fecha === b.fecha) return String(a.extension).localeCompare(String(b.extension));
-          return a.fecha.localeCompare(b.fecha);
-        });
-
-      registrosFiltrados.forEach(rec => {
-        const agent = agentes.find(a => String(a.ext) === String(rec.extension));
-const horario = agent ? obtenerHorarioAgente(agent, rec.fecha) : "08:00";
-
-        let estado = 'Sin marcar';
-
-        if (rec.login) {
-          const lm = toMinutes(rec.login);
-          const hm = toMinutes(horario || "08:00");
-
-          if (lm === null) {
-            estado = 'Hora inválida';
-          } else if (lm <= hm) {
-            estado = 'Puntual';
-          } else {
-            const r = lm - hm;
-            estado = 'Retraso ' + r + ' min';
-          }
-        }
-
-        rows.push({
-          main: [
-            rec.nombre || '',
-            rec.extension || '',
-            rec.fecha || '',
-            rec.login || '',
-            rec.logout || '',
-            rec.tiempoBanioTexto || '0:00',
-            rec.tiempoAlmuerzoTexto || '0:00',
-            rec.salientes || 0,
-            rec.entrantes || 0,
-            estado
-          ],
-          obs: rec.observaciones || ''
-        });
-      });
-
-      doc.setFontSize(14);
-      doc.text('Reporte De Agentes', 105, 14, null, null, 'center');
-
-      doc.setFontSize(10);
-      doc.text(`Rango: ${from || '...'} a ${to || '...'}`, 105, 20, null, null, 'center');
-
-      const body = [];
-
-      rows.forEach(r => {
-        body.push(r.main);
-        body.push([{
-          content: 'Observaciones: ' + (r.obs || 'Sin observación'),
-          colSpan: 10,
-          styles: { halign: 'left' }
-        }]);
-      });
-
-      doc.autoTable({
+      docPdf.autoTable({
         startY: 26,
-        head: [['Nombre', 'Ext', 'Fecha', 'Log in', 'Log out', 'Baño', 'Almuerzo', 'Salientes', 'Entrantes', 'Estado']],
-        body: body,
-        styles: { fontSize: 8, cellPadding: 3, halign: 'center', valign: 'middle' },
+        head: [["Nombre", "Ext", "Fecha", "Log in", "Log out", "Baño", "Almuerzo", "Salientes", "Entrantes", "Estado", "Observaciones"]],
+        body: buildPdfRows(records),
+        styles: { fontSize: 8, cellPadding: 2.5, halign: "center", valign: "middle" },
         headStyles: { fillColor: [37, 99, 235], textColor: 255 },
-
-        didParseCell: function (data) {
-          if (data.section === 'body' && data.column.index === 9) {
-            const val = String(data.cell.raw || '');
-            if (val.startsWith('Retraso')) data.cell.styles.textColor = [220, 38, 38];
-            if (val === 'Sin marcar') data.cell.styles.textColor = [130, 130, 130];
+        didParseCell(data) {
+          if (data.section === "body" && data.column.index === 10) {
+            data.cell.styles.halign = "left";
           }
-
-          if (
-            data.section === 'body' &&
-            typeof data.cell.raw === 'string' &&
-            data.cell.raw.startsWith('Observaciones:')
-          ) {
-            data.cell.styles.halign = 'left';
-            data.cell.styles.fontStyle = 'italic';
-            data.cell.styles.textColor = [200, 200, 200];
+          if (data.section === "body" && data.column.index === 9) {
+            const val = String(data.cell.raw || "");
+            if (val.startsWith("Retraso")) data.cell.styles.textColor = [220, 38, 38];
+            if (val === "Puntual") data.cell.styles.textColor = [22, 163, 74];
+            if (val === "Sin marcar") data.cell.styles.textColor = [148, 163, 184];
           }
         }
       });
 
-      doc.save(`reporte_agentes_${from || 'all'}_a_${to || 'all'}.pdf`);
+      docPdf.save(`operaciones_prueba_${from}_a_${to}.pdf`);
+    }
+
+    function openAccessModal() {
+      $("accessModalOverlay").classList.add("show");
+    }
+
+    function closeAccessModal() {
+      $("accessModalOverlay").classList.remove("show");
+    }
+
+    function openSummaryList(type) {
+      const groups = window.__summaryGroups || {};
+      const items = groups[type] || [];
+
+      const titleMap = {
+        "baño": "Agentes en baño",
+        "almuerzo": "Agentes en almuerzo",
+        "break": "Agentes en break"
+      };
+
+      $("summaryListTitle").textContent = titleMap[type] || "Detalle";
+      const body = $("summaryListBody");
+
+      if (!items.length) {
+        body.innerHTML = `<div class="summary-list-empty">No hay agentes en esta categoría.</div>`;
+      } else {
+        body.innerHTML = items.map(item => `
+            <div class="summary-list-item">
+                <div>
+                    <div class="summary-list-item-name">${esc(item.nombre || "-")}</div>
+                    <div class="summary-list-item-meta">Ext ${esc(item.ext || "-")} • ${esc(item.email || "")}</div>
+                </div>
+                <div class="mini-badge">${type === "baño" ? "🚻 Baño" : type === "almuerzo" ? "🍔 Almuerzo" : "⏸️ Break"}</div>
+            </div>
+        `).join("");
+      }
+
+      $("summaryListOverlay").classList.add("show");
+    }
+
+    function closeSummaryList() {
+      $("summaryListOverlay").classList.remove("show");
+    }
+
+    function bindSummaryClicks() {
+      document.querySelectorAll(".summary-clickable").forEach(el => {
+        el.addEventListener("click", () => {
+          const type = el.dataset.summaryType;
+          if (type) openSummaryList(type);
+        });
+      });
+    }
+
+    function bootStaticUI() {
+      populateRosterSelects();
+      $("filterFrom").value = todayKey();
+      $("filterTo").value = todayKey();
+      $("recordDate").value = todayKey();
+    }
+    bindSummaryClicks();
+
+    $("btnCloseSummaryList").addEventListener("click", closeSummaryList);
+    $("summaryListOverlay").addEventListener("click", (e) => {
+      if (e.target === $("summaryListOverlay")) closeSummaryList();
     });
-function abrirArchivo(dataUrl, nombre) {
-  const nuevaVentana = window.open();
+    async function bootForUser(user) {
+      currentUser = user;
+      await ensureAdminProfile(user);
+      currentProfile = await getUserProfile(user.email);
 
-  if (!nuevaVentana) {
-    alert("El navegador bloqueó la ventana emergente.");
-    return;
-  }
+      setVisible($("loginView"), false);
+      setVisible($("appView"), true);
+      $("userInfo").textContent = `${user.displayName || "Usuario"} · ${user.email || ""}`;
+      const roleLabel = currentProfile?.rol === "agent" ? "Agente" : currentProfile?.rol === "admin" ? "Admin" : "sin acceso";
+      $("roleInfo").textContent = `Rol: ${roleLabel}`;
 
-  const mime = (dataUrl.match(/^data:([^;]+);/) || [])[1] || "";
-  const sePuedePrevisualizar =
-    mime === "application/pdf" ||
-    mime.startsWith("image/") ||
-    mime.startsWith("text/");
+      await subscribeUsers();
+      await subscribeTodaySummary();
+      startLiveTimer();
+      startDayWatcher();
 
-  const contenido = sePuedePrevisualizar
-    ? `<iframe src="${dataUrl}"></iframe>`
-    : `
-      <div class="mensaje">
-        <h2>Vista previa no disponible</h2>
-        <p>Este tipo de archivo no se puede mostrar directamente aquí.</p>
-        <p>Usa el botón <strong>Descargar archivo</strong> para abrirlo en tu equipo.</p>
-      </div>
-    `;
+      const hasProfile = Boolean(currentProfile && currentProfile.activo !== false);
+      const isAgent = hasProfile && currentProfile?.rol === "agent";
+      const isAdmin = hasProfile && currentProfile?.rol === "admin";
+      setVisible($("noAccessView"), !hasProfile);
+      setVisible($("agentView"), isAgent);
+      setVisible($("adminView"), isAdmin);
+      setVisible($("topSummary"), isAdmin);
+      setVisible($("topQuickSection"), isAdmin);
+      setVisible($("btnQuickActionsToggle"), isAdmin);
+      setVisible($("btnOpenAccessModal"), hasProfile && currentProfile?.rol === "admin");
+      setVisible($("btnOpenAccessModalToolbar"), hasProfile && currentProfile?.rol === "admin");
 
-  nuevaVentana.document.write(`
-    <html>
-      <head>
-        <title>${nombre}</title>
-        <style>
-          body{
-            margin:0;
-            background:#0b1224;
-            color:white;
-            font-family:Arial,sans-serif;
-            display:flex;
-            flex-direction:column;
-            height:100vh;
-          }
-          .barra{
-            padding:10px;
-            background:#111827;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:10px;
-          }
-          .barra a{
-            background:#f59e0b;
-            color:#08101a;
-            text-decoration:none;
-            padding:8px 12px;
-            border-radius:8px;
-            font-weight:bold;
-          }
-          iframe{
-            flex:1;
-            border:none;
-            background:white;
-          }
-          .mensaje{
-            padding:24px;
-            line-height:1.5;
-          }
-          .mensaje h2{
-            margin-top:0;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="barra">
-          <div>${nombre}</div>
-          <a href="${dataUrl}" download="${nombre}">Descargar archivo</a>
-        </div>
-        ${contenido}
-      </body>
-    </html>
-  `);
+      if (!hasProfile) {
+        if (unsubAdminRange) { unsubAdminRange(); unsubAdminRange = null; }
+        return;
+      }
 
-  nuevaVentana.document.close();
-}
-    // initial render
-    cargarRegistros();
+      if (currentProfile.rol === "agent") {
+        await ensureTodayRecordForProfile(currentProfile);
+        renderAgentView();
+      }
+
+      if (currentProfile.rol === "admin") {
+        await subscribeAdminRange();
+        renderAccessUsers();
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await bootForUser(user);
+      } else {
+        currentUser = null;
+        currentProfile = null;
+        todaySummaryRecords = [];
+        adminRangeRecords = [];
+        accessUsers = [];
+
+        if (unsubTodaySummary) { unsubTodaySummary(); unsubTodaySummary = null; }
+        if (unsubAdminRange) { unsubAdminRange(); unsubAdminRange = null; }
+        if (unsubUsers) { unsubUsers(); unsubUsers = null; }
+        if (liveTimer) { clearInterval(liveTimer); liveTimer = null; }
+        stopDayWatcher();
+        setVisible($("loginView"), true);
+        setVisible($("appView"), false);
+      }
+    });
+
+    // Eventos base
+    $("btnLogin").addEventListener("click", loginMicrosoft);
+    $("btnLogout").addEventListener("click", logout);
+    $("btnDisponible").addEventListener("click", () => setMyStatus("disponible"));
+    $("btnBano").addEventListener("click", () => setMyStatus("baño"));
+    $("btnAlmuerzo").addEventListener("click", () => setMyStatus("almuerzo"));
+    $("btnBreak").addEventListener("click", () => setMyStatus("break"));
+    $("btnRegistrarLlamada").addEventListener("click", () => registerMyCalls($("agentCallType").value, $("agentCallQty").value));
+    $("btnQuickEntrante").addEventListener("click", () => registerMyCalls("Entrante", 1));
+    $("btnQuickSaliente").addEventListener("click", () => registerMyCalls("Saliente", 1));
+
+    $("btnSaveAccess").addEventListener("click", saveAccessProfile);
+    $("btnClearAccess").addEventListener("click", clearAccessForm);
+    $("btnOpenAccessModal").addEventListener("click", openAccessModal);
+    $("btnCloseAccessModal").addEventListener("click", closeAccessModal);
+
+    $("btnGenerateToday").addEventListener("click", ensureTodayRecordsForAllActiveUsers);
+    $("btnReloadAdmin").addEventListener("click", subscribeAdminRange);
+    $("btnDownloadPdf").addEventListener("click", downloadCurrentPdf);
+    $("btnResetToday").addEventListener("click", resetTodayTestData);
+    $("btnQuickActionsToggle").addEventListener("click", (e) => {
+      e.stopPropagation();
+      $("quickActionsMenu").classList.toggle("show");
+    });
+    document.addEventListener("click", (e) => {
+      const wrap = document.querySelector(".quick-actions-wrap");
+      if (wrap && !wrap.contains(e.target)) $("quickActionsMenu").classList.remove("show");
+    });
+    ["btnGenerateToday", "btnReloadAdmin", "btnDownloadPdf", "btnOpenAccessModal", "btnResetToday"].forEach(id => {
+      $(id).addEventListener("click", () => $("quickActionsMenu").classList.remove("show"));
+    }); renderAdminCards();
+
+    $("searchInput").addEventListener("input", () => { adminCurrentPage = 1; renderAdminCards(); });
+    $("filterStatus").addEventListener("change", () => { adminCurrentPage = 1; renderAdminCards(); });
+    $("filterAgent").addEventListener("change", () => { adminCurrentPage = 1; renderAdminCards(); });
+    $("filterFrom").addEventListener("change", subscribeAdminRange);
+    $("filterTo").addEventListener("change", subscribeAdminRange);
+
+    $("btnOpenRecordModal").addEventListener("click", () => openRecordModal());
+    $("recordUserSelect").addEventListener("change", syncRecordUserFields);
+    $("btnCloseRecordModal").addEventListener("click", closeRecordModal);
+    $("btnSaveRecord").addEventListener("click", saveRecordFromModal);
+
+    $("btnClosePdf").addEventListener("click", closePdf);
+    $("recordModalOverlay").addEventListener("click", (e) => { if (e.target === $("recordModalOverlay")) closeRecordModal(); });
+    $("pdfModalOverlay").addEventListener("click", (e) => { if (e.target === $("pdfModalOverlay")) closePdf(); });
+    $("accessModalOverlay").addEventListener("click", (e) => { if (e.target === $("accessModalOverlay")) closeAccessModal(); });
+
+
+    document.querySelectorAll(".mood-btn").forEach(btn => {
+      btn.addEventListener("click", () => saveMyMood(btn.dataset.mood, btn.dataset.emoji));
+    });
+
+    bootStaticUI();
   </script>
 </body>
 

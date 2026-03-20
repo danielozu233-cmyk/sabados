@@ -2705,11 +2705,14 @@
 
     function renderGlobalSummary(records) {
       const today = todayKey();
-      const activos = records.filter(r => r.fecha === today && (r.estado || "disponible") !== "ausencia");
-      const total = activos.length;
-      const enBano = records.filter(r => r.fecha === today && r.estado === "baño");
-      const enAlmuerzo = records.filter(r => r.fecha === today && r.estado === "almuerzo");
-      const enBreak = records.filter(r => r.fecha === today && r.estado === "break");
+      const activos = records.filter(r =>
+        r.fecha === today &&
+        !r.logout &&
+        (r.estado || "disponible") !== "ausencia"
+      ); const total = activos.length;
+      const enBano = records.filter(r => r.fecha === today && !r.logout && r.estado === "baño");
+      const enAlmuerzo = records.filter(r => r.fecha === today && !r.logout && r.estado === "almuerzo");
+      const enBreak = records.filter(r => r.fecha === today && !r.logout && r.estado === "break");
       const disponibles = activos.filter(r => (r.estado || "disponible") === "disponible");
       $("kpiTotal").textContent = total;
       $("kpiBano").textContent = enBano.length;
@@ -2817,14 +2820,14 @@
         agPuntualidad.style.color = p.color;
       }
 
-let statusKey = record.logout ? "finalizado" : (record.estado || "disponible");
-const liveBathroom = liveAccumulatedSeconds(record, "baño");
-const liveLunch = liveAccumulatedSeconds(record, "almuerzo");
-const liveBreak = liveAccumulatedSeconds(record, "break");
+      let statusKey = record.logout ? "finalizado" : (record.estado || "disponible");
+      const liveBathroom = liveAccumulatedSeconds(record, "baño");
+      const liveLunch = liveAccumulatedSeconds(record, "almuerzo");
+      const liveBreak = liveAccumulatedSeconds(record, "break");
 
-if (!record.logout && record.estado === "baño" && liveBathroom > 15 * 60) statusKey = "excedido";
-if (!record.logout && record.estado === "almuerzo" && liveLunch > 60 * 60) statusKey = "excedido";
-if (!record.logout && record.estado === "break" && liveBreak > 15 * 60) statusKey = "excedido";
+      if (!record.logout && record.estado === "baño" && liveBathroom > 15 * 60) statusKey = "excedido";
+      if (!record.logout && record.estado === "almuerzo" && liveLunch > 60 * 60) statusKey = "excedido";
+      if (!record.logout && record.estado === "break" && liveBreak > 15 * 60) statusKey = "excedido";
 
       if (agEstadoBadge) setStatusBadge(agEstadoBadge, statusKey);
 
@@ -2859,11 +2862,11 @@ if (!record.logout && record.estado === "break" && liveBreak > 15 * 60) statusKe
         if (filter === "leve" && punctuality.key !== "leve") return false;
         if (filter === "retraso" && punctuality.key !== "retraso") return false;
         if (filter === "sinmarcar" && punctuality.key !== "sinmarcar") return false;
-const visibleState = (rec.fecha !== todayKey() || rec.logout)
-  ? "finalizado"
-  : (rec.estado || "disponible");
+        const visibleState = (rec.fecha !== todayKey() || rec.logout)
+          ? "finalizado"
+          : (rec.estado || "disponible");
 
-if (["baño", "almuerzo", "break", "disponible", "ausencia", "finalizado"].includes(filter) && visibleState !== filter) return false;        return true;
+        if (["baño", "almuerzo", "break", "disponible", "ausencia", "finalizado"].includes(filter) && visibleState !== filter) return false; return true;
       }).sort((a, b) => {
         if (a.fecha === b.fecha) return String(a.ext).localeCompare(String(b.ext));
         return String(b.fecha).localeCompare(String(a.fecha));
@@ -2887,7 +2890,9 @@ if (["baño", "almuerzo", "break", "disponible", "ausencia", "finalizado"].inclu
         const liveAlmuerzo = rec.fecha === todayKey() ? liveAccumulatedSeconds(rec, "almuerzo") : Number(rec.segundosAlmuerzo || 0);
         const liveBreak = rec.fecha === todayKey() ? liveAccumulatedSeconds(rec, "break") : Number(rec.segundosBreak || 0);
         const isPastRecord = rec.fecha !== todayKey();
-        const stateKey = isPastRecord
+        const hasLogout = !!rec.logout;
+
+        const stateKey = (isPastRecord || hasLogout)
           ? "finalizado"
           : (
             (rec.estado === "baño" && liveBano > 15 * 60) ||

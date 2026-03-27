@@ -2626,10 +2626,80 @@
             width: 100%;
         }
 
-        .agent-panel-centered 
-        .agent-panel-centered .agent-personal-grid,
+        .agent-panel-centered .agent-panel-centered .agent-personal-grid,
         .agent-panel-centered .agent-bottom-grid {
             width: 100%;
+        }
+
+        .summary-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            min-height: 62px;
+        }
+
+        .summary-list-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .summary-list-avatar-wrap {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, .14);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, .18);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .03));
+        }
+
+        .summary-list-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .summary-list-avatar-fallback {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+            font-weight: 900;
+            color: #fff;
+            background: linear-gradient(135deg, #1d4ed8, #0f172a);
+        }
+
+        .summary-list-info {
+            min-width: 0;
+        }
+
+        .summary-list-item-name {
+            font-weight: 900;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .summary-list-item-meta {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
 
@@ -4790,7 +4860,10 @@
         function closeAccessModal() {
             $("accessModalOverlay").classList.remove("show");
         }
-
+        function getProfilePhotoByEmail(email) {
+            const user = accessUsers.find(u => emailKey(u.email) === emailKey(email));
+            return user?.fotoBase64 || "";
+        }
         function openSummaryList(type) {
             const groups = window.__summaryGroups || {};
             const items = groups[type] || [];
@@ -4807,15 +4880,34 @@
             if (!items.length) {
                 body.innerHTML = `<div class="summary-list-empty">No hay agentes en esta categoría.</div>`;
             } else {
-                body.innerHTML = items.map(item => `
-            <div class="summary-list-item">
-                <div>
-                    <div class="summary-list-item-name">${esc(item.nombre || "-")}</div>
-                    <div class="summary-list-item-meta">Ext ${esc(item.ext || "-")} • ${esc(item.email || "")}</div>
+                body.innerHTML = items.map(item => {
+                    const foto = getProfilePhotoByEmail(item.email);
+                    const inicial = esc((item.nombre || "?").charAt(0).toUpperCase());
+
+                    return `
+                <div class="summary-list-item">
+                    <div class="summary-list-left">
+                        <div class="summary-list-avatar-wrap">
+                            ${foto
+                            ? `<img src="${foto}" alt="${esc(item.nombre || "Agente")}" class="summary-list-avatar">`
+                            : `<div class="summary-list-avatar-fallback">${inicial}</div>`
+                        }
+                        </div>
+
+                        <div class="summary-list-info">
+                            <div class="summary-list-item-name">${esc(item.nombre || "-")}</div>
+                            <div class="summary-list-item-meta">
+                                Ext ${esc(item.ext || "-")} • ${esc(item.email || "")}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mini-badge">
+                        ${type === "baño" ? "🚻 Baño" : type === "almuerzo" ? "🍔 Almuerzo" : "☕ Break"}
+                    </div>
                 </div>
-                <div class="mini-badge">${type === "baño" ? "🚻 Baño" : type === "almuerzo" ? "🍔 Almuerzo" : "⏸️ Break"}</div>
-            </div>
-        `).join("");
+            `;
+                }).join("");
             }
 
             $("summaryListOverlay").classList.add("show");
